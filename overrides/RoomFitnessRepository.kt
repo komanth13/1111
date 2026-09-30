@@ -17,6 +17,8 @@ import com.example.data.model.MealType
 import com.example.data.model.UserProfile
 import com.example.data.model.WaterLog
 import com.example.data.model.WeightLog
+import com.example.data.network.RemoteFoodDataSource
+import com.example.util.BarcodeUtils
 import com.example.domain.repository.FitnessRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -28,13 +30,29 @@ class RoomFitnessRepository(
     private val exerciseDao: ExerciseDao,
     private val userDao: UserDao,
     private val measurementDao: MeasurementDao,
-    private val habitDao: HabitDao
+    private val habitDao: HabitDao,
+    private val remoteFoodDataSource: RemoteFoodDataSource
 ) : FitnessRepository {
     // Food
     override val allFoods: Flow<List<FoodItem>> = foodDao.getAllFoods()
     override fun searchFoods(query: String): Flow<List<FoodItem>> = foodDao.searchFoods(query)
     override fun getFoodsByCategory(category: String): Flow<List<FoodItem>> = foodDao.getFoodsByCategory(category)
-    override suspend fun findFoodByBarcode(barcode: String): FoodItem? = foodDao.findByBarcode(barcode)
+    override suspend fun findFoodByBarcode(barcode: String): FoodItem? {
+        val candidates = BarcodeUtils.lookupCandidates(barcode)
+        if (candidates.isEmpty()) return null
+
+        for (candidate in candidates) {
+            foodDao.findByBarcode(candidate)?.let { return it }
+        }
+
+        for (candidate in candidates) {
+            val remote = remoteFoodDataSource.findByBarcode(candidate) ?: continue
+            foodDao.insertFood(remote)
+            return remote
+        }
+
+        return null
+    }
     override suspend fun insertFood(foodItem: FoodItem): Long = foodDao.insertFood(foodItem)
     override suspend fun insertFoods(foods: List<FoodItem>) = foodDao.insertFoods(foods)
     override suspend fun deleteFood(id: Long) = foodDao.deleteFood(id)
