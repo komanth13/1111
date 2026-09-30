@@ -39,7 +39,6 @@ jobs:
           cp overrides/RemoteFoodDataSource.kt project/app/src/main/java/com/example/data/network/RemoteFoodDataSource.kt
           cp overrides/OpenFoodFactsClient.kt project/app/src/main/java/com/example/data/network/OpenFoodFactsClient.kt
           cp overrides/AndroidManifest.xml project/app/src/main/AndroidManifest.xml
-          cp overrides/LocalizationManager.kt project/app/src/main/java/com/example/util/LocalizationManager.kt
           cp overrides/app-build.gradle.kts project/app/build.gradle.kts
 
       - name: Prepare installable package identity
