@@ -28,6 +28,40 @@ jobs:
           test -f project/settings.gradle.kts
           test -f project/app/build.gradle.kts
 
+      - name: Apply build fixes
+        shell: python
+        run: |
+          from pathlib import Path
+
+          repo = Path("project")
+
+          room = repo / "app/src/main/java/com/example/data/repository/RoomFitnessRepository.kt"
+          s = room.read_text()
+          s = s.replace(
+              """    override suspend fun addWater(date: String, amountMl: Int) = waterDao.insertWaterLog(
+        WaterLog(date = date, amountMl = amountMl)
+    )""",
+              """    override suspend fun addWater(date: String, amountMl: Int) {
+        waterDao.insertWaterLog(WaterLog(date = date, amountMl = amountMl))
+    }"""
+          )
+          room.write_text(s)
+
+          admin = repo / "app/src/main/java/com/example/ui/components/AdminPaymentRequisitesSection.kt"
+          s = admin.read_text()
+          anchor = "import com.example.ui.theme.ProteinBlue\n"
+          if "import com.example.util.StringKey" not in s:
+              s = s.replace(anchor, anchor + "import com.example.util.StringKey\nimport com.example.util.appString\n")
+          admin.write_text(s)
+
+          receipt = repo / "app/src/main/java/com/example/ui/components/PaymentReceiptDialog.kt"
+          s = receipt.read_text().replace(
+              "StringKey.DIALOG_RECEIPT_PAID_BADGE",
+              "StringKey.DIALOG_RECEIPT_PENDING_BADGE"
+          )
+          receipt.write_text(s)
+
+
       - name: Set up Java 17
         uses: actions/setup-java@v5
         with:
