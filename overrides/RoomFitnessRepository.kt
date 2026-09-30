@@ -20,6 +20,9 @@ import com.example.data.model.WeightLog
 import com.example.data.network.RemoteFoodDataSource
 import com.example.util.BarcodeUtils
 import com.example.domain.repository.FitnessRepository
+import com.example.domain.model.BarcodeLookupException
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.Flow
 
 class RoomFitnessRepository(
@@ -33,25 +36,36 @@ class RoomFitnessRepository(
     private val habitDao: HabitDao,
     private val remoteFoodDataSource: RemoteFoodDataSource
 ) : FitnessRepository {
+    private val barcodeLookupMutex = Mutex()
+
     // Food
     override val allFoods: Flow<List<FoodItem>> = foodDao.getAllFoods()
     override fun searchFoods(query: String): Flow<List<FoodItem>> = foodDao.searchFoods(query)
     override fun getFoodsByCategory(category: String): Flow<List<FoodItem>> = foodDao.getFoodsByCategory(category)
-    override suspend fun findFoodByBarcode(barcode: String): FoodItem? {
+    override suspend fun findFoodByBarcode(barcode: String): FoodItem? = barcodeLookupMutex.withLock {
         val candidates = BarcodeUtils.lookupCandidates(barcode)
-        if (candidates.isEmpty()) return null
+        if (candidates.isEmpty()) return@withLock null
+        val cached = candidates.firstNotNullOfOrNull { foodDao.findByBarcode(it) }
+        // A label entered by the user is an intentional correction and stays authoritative.
+        if (cached?.isCustom == true) return@withLock cached
 
+        var failure: BarcodeLookupException? = null
         for (candidate in candidates) {
-            foodDao.findByBarcode(candidate)?.let { return it }
+            try {
+                val remote = remoteFoodDataSource.findByBarcode(candidate) ?: continue
+                val existing = cached ?: remote.barcode?.let { foodDao.findByBarcode(it) }
+                val refreshed = remote.copy(id = existing?.id ?: 0L)
+                val id = foodDao.insertFood(refreshed)
+                return@withLock refreshed.copy(id = id)
+            } catch (error: BarcodeLookupException) {
+                failure = error
+                // Stop on network/service failure instead of sending the equivalent code again.
+                break
+            }
         }
-
-        for (candidate in candidates) {
-            val remote = remoteFoodDataSource.findByBarcode(candidate) ?: continue
-            foodDao.insertFood(remote)
-            return remote
-        }
-
-        return null
+        cached?.let { return@withLock it }
+        failure?.let { throw it }
+        null
     }
     override suspend fun insertFood(foodItem: FoodItem): Long = foodDao.insertFood(foodItem)
     override suspend fun insertFoods(foods: List<FoodItem>) = foodDao.insertFoods(foods)

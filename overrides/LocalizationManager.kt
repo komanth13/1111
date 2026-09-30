@@ -349,6 +349,13 @@ enum class StringKey {
     DIALOG_BARCODE_CAMERA_PERMISSION,
     DIALOG_BARCODE_GRANT_PERMISSION,
     DIALOG_BARCODE_NOT_FOUND,
+    DIALOG_BARCODE_NETWORK_ERROR,
+    DIALOG_BARCODE_SERVICE_ERROR,
+    DIALOG_BARCODE_INCOMPLETE,
+    DIALOG_BARCODE_INVALID_CODE,
+    DIALOG_BARCODE_SOURCE,
+    DIALOG_BARCODE_ADD_MANUALLY,
+    DIALOG_BARCODE_SAVE_ERROR,
     DIALOG_BARCODE_SCAN_AGAIN,
     DIALOG_BARCODE_CAMERA_ERROR,
     DIALOG_BARCODE_MANUAL_HINT,
@@ -793,11 +800,18 @@ object LocalizationManager {
             StringKey.DIALOG_BARCODE_CAMERA_HINT to "Поместите штрих-код в рамку",
             StringKey.DIALOG_BARCODE_CAMERA_PERMISSION to "Для сканирования нужен доступ к камере. Штрих-коды обрабатываются на устройстве.",
             StringKey.DIALOG_BARCODE_GRANT_PERMISSION to "Разрешить камеру",
-            StringKey.DIALOG_BARCODE_NOT_FOUND to "Штрих-код считан, но товар не найден в локальной и онлайн-базе. Его можно добавить вручную.",
+            StringKey.DIALOG_BARCODE_NOT_FOUND to "Товар не найден в онлайн-базе. Можно добавить данные с упаковки.",
+            StringKey.DIALOG_BARCODE_NETWORK_ERROR to "Нет соединения с онлайн-базой. Проверьте интернет и повторите поиск.",
+            StringKey.DIALOG_BARCODE_SERVICE_ERROR to "Онлайн-база временно недоступна. Повторите поиск позже.",
+            StringKey.DIALOG_BARCODE_INCOMPLETE to "Товар найден, но данные калорий и БЖУ неполные. Введите значения с упаковки на 100 г.",
+            StringKey.DIALOG_BARCODE_INVALID_CODE to "Введите штрих-код из 8, 12, 13 или 14 цифр.",
+            StringKey.DIALOG_BARCODE_SOURCE to "Онлайн-каталог: Open Food Facts • ODbL",
+            StringKey.DIALOG_BARCODE_ADD_MANUALLY to "Добавить данные с упаковки",
+            StringKey.DIALOG_BARCODE_SAVE_ERROR to "Не удалось сохранить продукт. Повторите попытку.",
             StringKey.DIALOG_BARCODE_SCAN_AGAIN to "Сканировать снова",
             StringKey.DIALOG_BARCODE_CAMERA_ERROR to "Не удалось запустить камеру. Можно ввести код вручную.",
             StringKey.DIALOG_BARCODE_MANUAL_HINT to "Или введите код вручную",
-            StringKey.DIALOG_BARCODE_SEARCHING to "Ищем продукт в локальной и онлайн-базе…",
+            StringKey.DIALOG_BARCODE_SEARCHING to "Ищем продукт онлайн…",
             StringKey.DIALOG_PROMO_TITLE to "Промокод или ссылка",
             StringKey.DIALOG_PROMO_SUBTITLE to "Введите код доступа для активации Slim / Premium",
             StringKey.DIALOG_PROMO_INPUT_LABEL to "Промокод или ссылка",
@@ -998,3 +1012,1126 @@ object LocalizationManager {
             StringKey.DIARY_MEAL_SNACKS to "Перекус",
             StringKey.DIARY_ADD_FOOD to "Додати",
             StringKey.DIARY_QUICK_CALORIES to "Швидкі ккал",
+            StringKey.DIARY_COPY_YESTERDAY to "Вчорашнє",
+            StringKey.DIARY_FASTING_TIMER to "Інтервальне голодування",
+            StringKey.DIARY_FASTING_START to "Старт",
+            StringKey.DIARY_FASTING_STOP to "Стоп",
+            StringKey.DIARY_WATER_TRACKER to "Трекер води",
+            StringKey.DIARY_ADD_EXERCISE to "Активність",
+            StringKey.DIARY_BARCODE_SCANNER to "Штрих-код",
+
+            StringKey.WEIGHT_TITLE to "Динаміка ваги",
+            StringKey.WEIGHT_CURRENT to "Поточна",
+            StringKey.WEIGHT_START to "Старт",
+            StringKey.WEIGHT_TARGET to "Ціль",
+            StringKey.WEIGHT_TREND to "Трендова вага",
+            StringKey.WEIGHT_LOG_BUTTON to "Записати вагу",
+            StringKey.WEIGHT_CHART_TITLE to "Графік зміни ваги",
+            StringKey.WEIGHT_MEASUREMENTS_TITLE to "Виміри тіла",
+            StringKey.WEIGHT_WEEKLY_DEFICIT_TITLE to "Тижневий дефіцит калорій",
+
+            StringKey.FOOD_SEARCH_PLACEHOLDER to "Пошук продуктів за назвою...",
+            StringKey.FOOD_ALL_CATEGORIES to "Всі категорії",
+            StringKey.FOOD_CREATE_CUSTOM to "Створити продукт",
+
+            StringKey.INSIGHTS_TITLE to "Аналітика та поради",
+            StringKey.INSIGHTS_STREAKS to "Трекер звичок",
+            StringKey.INSIGHTS_WEEKLY_CHART to "Баланс за 7 днів",
+            StringKey.INSIGHTS_EXPORT_REPORT to "Експорт звіту для тренера / лікаря",
+
+            StringKey.PROFILE_TITLE to "Профіль та параметри",
+            StringKey.PROFILE_SUBTITLE to "Персональний розрахунок дефіциту калорій",
+            StringKey.PROFILE_PERSONAL_DATA to "Особисті параметри тіла",
+            StringKey.PROFILE_GENDER to "Стать",
+            StringKey.GENDER_MALE to "Чоловіча",
+            StringKey.GENDER_FEMALE to "Жіноча",
+            StringKey.PROFILE_AGE to "Вік (років)",
+            StringKey.PROFILE_HEIGHT to "Зріст (см)",
+            StringKey.PROFILE_START_WEIGHT to "Початкова вага (кг)",
+            StringKey.PROFILE_CURRENT_WEIGHT to "Поточна вага (кг)",
+            StringKey.PROFILE_TARGET_WEIGHT to "Бажана вага (кг)",
+            StringKey.PROFILE_ACTIVITY_LEVEL to "Спосіб життя та рухливість",
+            StringKey.PROFILE_GOAL_PACE to "Бажаний темп схуднення",
+            StringKey.PROFILE_MACROS_TITLE to "Денні норми харчування (БЖВ)",
+            StringKey.PROFILE_CALORIES_GOAL to "Ціль калорій (ккал)",
+            StringKey.PROFILE_PROTEIN_GOAL to "Білки (г)",
+            StringKey.PROFILE_FAT_GOAL to "Жири (г)",
+            StringKey.PROFILE_CARBS_GOAL to "Вуглеводи (г)",
+            StringKey.PROFILE_WATER_GOAL to "Норма води (мл)",
+            StringKey.PROFILE_AUTO_CALC to "Перерахувати норми",
+            StringKey.PROFILE_SAVE_SETTINGS to "Зберегти параметри",
+            StringKey.PROFILE_SAVED_SUCCESS to "Параметри збережено! ✓",
+            StringKey.PROFILE_VALIDATION_FIX_ERRORS to "Перевірте виділені поля перед збереженням.",
+            StringKey.PROFILE_ERROR_NAME_TOO_LONG to "Ім’я задовге.",
+            StringKey.PROFILE_ERROR_ADULT_ONLY to "Автоматичні розрахунки SlimTrack доступні лише для користувачів 18+.",
+            StringKey.PROFILE_ERROR_AGE_RANGE to "Введіть вік від 18 до 100 років.",
+            StringKey.PROFILE_ERROR_HEIGHT_RANGE to "Введіть зріст від 120 до 230 см.",
+            StringKey.PROFILE_ERROR_WEIGHT_RANGE to "Введіть вагу від 30 до 250 кг.",
+            StringKey.PROFILE_ERROR_TARGET_ABOVE_CURRENT to "Для режиму зниження ваги ціль не має бути вищою за поточну вагу.",
+            StringKey.PROFILE_ERROR_TARGET_TOO_LOW to "Ця ціль виходить за підтримуваний діапазон для самостійного зниження ваги.",
+            StringKey.PROFILE_ERROR_CALORIES_RANGE to "Введіть підтримувану денну ціль калорій.",
+            StringKey.PROFILE_ERROR_MACRO_RANGE to "Введіть підтримуване значення макронутрієнта.",
+            StringKey.PROFILE_ERROR_WATER_RANGE to "Введіть ціль води від 500 до 6000 мл.",
+            StringKey.PROFILE_SAFE_CALC_NOTE to "Авторозрахунок працює лише для дорослих і обмежує надмірний дефіцит.",
+
+            StringKey.ACTIVITY_SEDENTARY to "Сидячий спосіб життя",
+            StringKey.ACTIVITY_SEDENTARY_DESC to "Офісна робота, мало руху",
+            StringKey.ACTIVITY_LIGHT to "Легка активність",
+            StringKey.ACTIVITY_LIGHT_DESC to "Тренування або ходьба 1–3 рази на тиждень",
+            StringKey.ACTIVITY_MODERATE to "Помірна активність",
+            StringKey.ACTIVITY_MODERATE_DESC to "Спорт 3–5 разів на тиждень",
+            StringKey.ACTIVITY_ACTIVE to "Висока активність",
+            StringKey.ACTIVITY_ACTIVE_DESC to "Інтенсивний спорт 6–7 разів на тиждень",
+
+            StringKey.PACE_EASY to "М'який (-0.25 кг/тижд)",
+            StringKey.PACE_RECOMMENDED to "Оптимальний (-0.5 кг/тижд)",
+            StringKey.PACE_FAST to "Швидкий (-0.75 кг/тижд)",
+            StringKey.PACE_MAX to "Максимум (-1.0 кг/тижд)",
+
+            StringKey.ANALYSIS_RESULT_TITLE to "Аналіз параметрів тіла",
+            StringKey.ANALYSIS_RESULT_SUBTITLE to "Розрахунок ІМТ, витрат калорій та терміну цілі",
+            StringKey.ANALYSIS_BMI_LABEL to "Індекс маси тіла (ІМТ)",
+            StringKey.BMI_UNDERWEIGHT to "Дефіцит маси",
+            StringKey.BMI_NORMAL to "Норма ваги ✓",
+            StringKey.BMI_OVERWEIGHT to "Надлишкова вага",
+            StringKey.BMI_OBESITY to "Ожиріння",
+            StringKey.ANALYSIS_IDEAL_WEIGHT_RANGE to "Здорова вага",
+            StringKey.ANALYSIS_DIFF_TO_GOAL to "До цілі",
+            StringKey.ANALYSIS_TO_LOSE to "Скинути",
+            StringKey.ANALYSIS_TO_GAIN to "Набрати",
+            StringKey.ANALYSIS_TDEE_LABEL to "Добові витрати (TDEE)",
+            StringKey.ANALYSIS_BMR_LABEL to "Базовий обмін (BMR)",
+            StringKey.ANALYSIS_WEEKS_ESTIMATE to "Прогноз терміну",
+            StringKey.ANALYSIS_HELP_BUTTON_TEXT to "Розбір ❔",
+
+            StringKey.EXPLAINER_DIALOG_TITLE to "Розбір ваших параметрів",
+            StringKey.EXPLAINER_SECTION_WHAT_IT_MEANS to "1. Що означають показники",
+            StringKey.EXPLAINER_SECTION_PROBLEMS to "2. На що це впливає",
+            StringKey.EXPLAINER_SECTION_HOW_TO_IMPROVE to "3. Як покращити результат",
+            StringKey.EXPLAINER_SECTION_HOW_APP_HELPS to "4. Як допомагає SlimTrack",
+            StringKey.EXPLAINER_SECTION_MOTIVATION to "5. Мотивація",
+            StringKey.EXPLAINER_GOT_IT_BUTTON to "Зрозуміло, до цілі! ✓",
+
+            StringKey.LEAD_MAGNET_TITLE to "Відкрийте 100% можливостей PRO",
+            StringKey.LEAD_MAGNET_SUBTITLE to "Сканер штрих-кодів, аналіз тіла, фастинг та авто-БЖВ",
+            StringKey.LEAD_MAGNET_PERK_1 to "Сканер штрих-кодів та швидке додавання ккал",
+            StringKey.LEAD_MAGNET_PERK_2 to "Медичний розбір ІМТ та прогноз у тижнях",
+            StringKey.LEAD_MAGNET_PERK_3 to "Таймер голодування 16:8 та експорт звітів",
+            StringKey.LEAD_MAGNET_BUTTON to "Тарифи та знижки ⭐",
+
+            StringKey.DIARY_WATER_HINT to "Прискорює обмін речовин",
+            StringKey.DIARY_EXERCISE_TITLE to "Активність та спорт",
+            StringKey.DIARY_EXERCISE_HINT to "Збільшує ліміт калорій",
+            StringKey.DIARY_NO_ITEMS_YET to "Немає записів",
+            StringKey.DIARY_HABITS_TITLE to "Трекер звичок",
+            StringKey.DIARY_HABITS_DESC to "Щоденний чек-лист дисципліни",
+            StringKey.DIARY_OPEN_HABITS to "Відкрити",
+            StringKey.DIARY_CALORIES_OVER to "перевищено",
+            StringKey.DIARY_CURRENT_DEFICIT to "Дефіцит:",
+            StringKey.DIARY_CURRENT_SURPLUS to "Профіцит:",
+            StringKey.DIARY_MACROS_TITLE to "Макронутрієнти (БЖВ)",
+
+            StringKey.ADMIN_TAB_UPDATE to "Оновлення (.APK)",
+            StringKey.ADMIN_INSTALL_APK_BUTTON to "Встановити оновлення (.apk)",
+            StringKey.ADMIN_INSTALL_APK_DESC to "Оберіть завантажений APK для оновлення поверх без втрати даних",
+            StringKey.ADMIN_APK_NO_DELETE_NOTE to "💡 Видаляти додаток не потрібно! Android оновить його поверх і збереже всі записи.",
+
+            StringKey.UNIT_KCAL to "ккал",
+            StringKey.UNIT_GRAM to "г",
+            StringKey.UNIT_ML to "мл",
+            StringKey.UNIT_CM to "см",
+            StringKey.UNIT_MIN to "хв",
+
+            StringKey.INSIGHTS_SUBTITLE to "Науковий підхід до зниження ваги",
+            StringKey.INSIGHTS_FASTING_TITLE to "Інтервальне голодування 16:8",
+            StringKey.INSIGHTS_FASTING_ACTIVE to "Фаза активного голодування",
+            StringKey.INSIGHTS_FASTING_STOPPED to "Таймер зупинено",
+            StringKey.INSIGHTS_FASTING_BTN_START to "Старт",
+            StringKey.INSIGHTS_FASTING_BTN_STOP to "Стоп",
+            StringKey.INSIGHTS_RULES_TITLE to "5 правил сталого схуднення",
+
+            StringKey.WEIGHT_HEADER_SUBTITLE to "Контроль маси тіла та об'ємів",
+            StringKey.WEIGHT_ADD_BUTTON to "Записати вагу",
+            StringKey.WEIGHT_LOST_LABEL to "Скинуто",
+            StringKey.WEIGHT_REMAINING_LABEL to "До цілі",
+            StringKey.WEIGHT_WEEKS_LABEL to "Тижнів",
+            StringKey.WEIGHT_PROGRESS_TO_GOAL to "Прогрес до цілі",
+            StringKey.WEIGHT_FORECAST_TEXT to "Прогноз до цілі: ≈",
+            StringKey.WEIGHT_HISTORY_TITLE to "Історія зважувань",
+            StringKey.WEIGHT_EMPTY_HISTORY to "Немає записів. Натисніть «Записати вагу»!",
+            StringKey.WEIGHT_UNIT_KG to "кг",
+
+            StringKey.CHART_SUBTITLE to "Динаміка маси тіла",
+            StringKey.CHART_FILTER_7D to "7 дн.",
+            StringKey.CHART_FILTER_30D to "30 дн.",
+            StringKey.CHART_FILTER_ALL to "Всі",
+            StringKey.CHART_EMPTY to "Немає даних. Запишіть свою вагу!",
+            StringKey.CHART_ACTUAL_WEIGHT to "Вага",
+            StringKey.TREND_CARD_TITLE to "Трендова вага",
+            StringKey.TREND_CARD_SUBTITLE to "Згладжена лінія без затримки води",
+            StringKey.TREND_LABEL_TREND to "Тренд",
+            StringKey.TREND_LABEL_SCALE to "На вагах",
+            StringKey.TREND_INFO_GOOD to "Затримка води приховує прогрес — спалювання жиру йде за планом!",
+            StringKey.TREND_INFO_NORMAL to "Вага стабільно знижується завдяки дефіциту калорій.",
+            StringKey.WEEKLY_DEFICIT_SUBTITLE to "Сумарний баланс за 7 днів",
+            StringKey.WEEKLY_FAT_BURN_FORECAST to "Спалювання жиру за тиждень: ≈",
+            StringKey.WEEKLY_FAT_BURN_NOTE to "7 700 ккал дефіциту = 1 кг жирової тканини",
+            StringKey.MEAS_TITLE to "Виміри об'ємів тіла",
+            StringKey.MEAS_SUBTITLE to "Об'єми в сантиметрах",
+            StringKey.MEAS_WAIST to "Талія",
+            StringKey.MEAS_HIPS to "Стегна",
+            StringKey.MEAS_CHEST to "Груди",
+            StringKey.MEAS_BICEP to "Біцепс",
+            StringKey.MEAS_THIGH to "Стегно",
+            StringKey.MEAS_ADD_BTN to "Записати",
+            StringKey.MEAS_EMPTY_HINT to "Запишіть об'єми талії та стегон для контролю прогресу",
+            StringKey.HABIT_STREAK_BADGE to "дн. поспіль",
+            StringKey.HABIT_1 to "Випити денну норму води",
+            StringKey.HABIT_2 to "Виконати норму за білком",
+            StringKey.HABIT_3 to "Вкластися в дефіцит калорій",
+            StringKey.HABIT_4 to "Мінімум 8 000 кроків / спорт",
+            StringKey.HABIT_5 to "Без їжі за 3 години до сну",
+            StringKey.EXPORT_SUBTITLE to "Зведення прогресу за вагою та КБЖВ",
+            StringKey.EXPORT_SHARE_BTN to "Поділитися",
+            StringKey.EXPORT_COPY_BTN to "Копіювати",
+            StringKey.EXPORT_COPIED_TOAST to "Звіт скопійовано!",
+
+            StringKey.DIALOG_ADD_FOOD_TITLE to "Додати у",
+            StringKey.DIALOG_GRAMS_LABEL to "Вага порції (г)",
+            StringKey.DIALOG_EMPTY_FOODS to "Продукти не знайдено",
+            StringKey.DIALOG_ADD_EXERCISE_TITLE to "Додати активність",
+            StringKey.DIALOG_EXERCISE_NAME_LABEL to "Назва тренування",
+            StringKey.DIALOG_EXERCISE_MINUTES_LABEL to "Тривалість (хв)",
+            StringKey.DIALOG_EXERCISE_KCAL_LABEL to "Спалено (ккал)",
+            StringKey.DIALOG_ADD_WEIGHT_TITLE to "Записати вагу",
+            StringKey.DIALOG_WEIGHT_INPUT_LABEL to "Ваша вага (кг)",
+            StringKey.DIALOG_NOTE_LABEL to "Нотатка (необов'язково)",
+            StringKey.DIALOG_QUICK_CALORIES_TITLE to "Швидкі калорії",
+            StringKey.DIALOG_QUICK_CALORIES_SUBTITLE to "Миттєве введення калорій без пошуку страви",
+            StringKey.DIALOG_BARCODE_TITLE to "Сканер штрих-коду",
+            StringKey.DIALOG_BARCODE_SUBTITLE to "Наведіть камеру на штрих-код EAN/UPC або введіть код вручну",
+            StringKey.DIALOG_BARCODE_INPUT_LABEL to "Штрих-код",
+            StringKey.DIALOG_BARCODE_CAMERA_HINT to "Розмістіть штрих-код у рамці",
+            StringKey.DIALOG_BARCODE_CAMERA_PERMISSION to "Для сканування потрібен доступ до камери. Штрих-коди обробляються на пристрої.",
+            StringKey.DIALOG_BARCODE_GRANT_PERMISSION to "Дозволити камеру",
+            StringKey.DIALOG_BARCODE_NOT_FOUND to "Товар не знайдено в онлайн-базі. Можна додати дані з упаковки.",
+            StringKey.DIALOG_BARCODE_NETWORK_ERROR to "Немає з’єднання з онлайн-базою. Перевірте інтернет і повторіть пошук.",
+            StringKey.DIALOG_BARCODE_SERVICE_ERROR to "Онлайн-база тимчасово недоступна. Повторіть пошук пізніше.",
+            StringKey.DIALOG_BARCODE_INCOMPLETE to "Товар знайдено, але дані калорій і БЖВ неповні. Введіть значення з упаковки на 100 г.",
+            StringKey.DIALOG_BARCODE_INVALID_CODE to "Введіть штрих-код із 8, 12, 13 або 14 цифр.",
+            StringKey.DIALOG_BARCODE_SOURCE to "Онлайн-каталог: Open Food Facts • ODbL",
+            StringKey.DIALOG_BARCODE_ADD_MANUALLY to "Додати дані з упаковки",
+            StringKey.DIALOG_BARCODE_SAVE_ERROR to "Не вдалося зберегти продукт. Спробуйте ще раз.",
+            StringKey.DIALOG_BARCODE_SCAN_AGAIN to "Сканувати знову",
+            StringKey.DIALOG_BARCODE_CAMERA_ERROR to "Не вдалося запустити камеру. Можна ввести код вручну.",
+            StringKey.DIALOG_BARCODE_MANUAL_HINT to "Або введіть код вручну",
+            StringKey.DIALOG_BARCODE_SEARCHING to "Шукаємо продукт онлайн…",
+            StringKey.DIALOG_PROMO_TITLE to "Промокод або посилання",
+            StringKey.DIALOG_PROMO_SUBTITLE to "Введіть код доступу для активації Slim / Premium",
+            StringKey.DIALOG_PROMO_INPUT_LABEL to "Промокод або посилання",
+            StringKey.DIALOG_PROMO_ACTIVATE_BTN to "Активувати доступ ✓",
+            StringKey.DIALOG_PAYMENT_TITLE to "Оплата підписки",
+            StringKey.DIALOG_PAYMENT_SELECT_METHOD to "Оберіть спосіб оплати:",
+            StringKey.DIALOG_PAYMENT_REQUISITES_HEADER to "Реквізити для переказу:",
+            StringKey.DIALOG_PAYMENT_AMOUNT_TO_PAY to "Сума до сплати:",
+            StringKey.DIALOG_PAYMENT_NOTE_LABEL to "Примітка / Прізвище / TXID",
+            StringKey.DIALOG_PAYMENT_CONFIRM_BTN to "Я сплатив(ла) — Створити заявку на перевірку",
+            StringKey.DIALOG_PAYMENT_SECURITY_FOOTER to "🔒 Доступ активується лише після підтвердження оплати",
+            StringKey.DIALOG_RECEIPT_TITLE to "Заявку на перевірку створено",
+            StringKey.DIALOG_RECEIPT_SUBTITLE_FMT to "Надішліть заявку в підтримку. Доступ ще не активовано",
+            StringKey.DIALOG_RECEIPT_PENDING_BADGE to "НА ПЕРЕВІРЦІ",
+            StringKey.DIALOG_RECEIPT_ORDER_ID to "Номер замовлення:",
+            StringKey.DIALOG_RECEIPT_DATE to "Дата і час:",
+            StringKey.DIALOG_RECEIPT_METHOD to "Спосіб оплати:",
+            StringKey.DIALOG_RECEIPT_TOTAL to "Разом:",
+            StringKey.DIALOG_RECEIPT_DONE_BTN to "Готово",
+            StringKey.ADMIN_REQUISITES_HEADER to "⚙️ Налаштування реквізитів оплати",
+            StringKey.ADMIN_REQUISITES_SUBTITLE to "Вкажіть ваші картки та гаманці для прийому оплати",
+            StringKey.ADMIN_REQUISITES_ENABLED_METHODS to "Увімкнені способи оплати:",
+            StringKey.ADMIN_REQUISITES_SAVE_BTN to "Зберегти реквізити ✓",
+            StringKey.ADMIN_REQUISITES_SAVED_TOAST to "Реквізити збережено!",
+
+            StringKey.FOODS_TITLE to "База продуктів",
+            StringKey.FOODS_SUBTITLE to "Калорійність та БЖВ на 100 г",
+            StringKey.FOODS_SEARCH_HINT to "Пошук продуктів...",
+            StringKey.FOODS_CAT_ALL to "Всі",
+            StringKey.FOODS_CAT_MEAT to "М'ясо та птиця",
+            StringKey.FOODS_CAT_FISH to "Риба",
+            StringKey.FOODS_CAT_GRAINS to "Крупи",
+            StringKey.FOODS_CAT_DAIRY to "Молочні продукти",
+            StringKey.FOODS_CAT_VEG to "Овочі",
+            StringKey.FOODS_CAT_FRUITS to "Фрукти",
+            StringKey.FOODS_CAT_SNACKS to "Горіхи та снеки",
+            StringKey.FOODS_CREATE_BTN to "Свій продукт",
+            StringKey.FOOD_CUSTOM_BADGE to "Свій",
+            StringKey.FOOD_NAME_LABEL to "Назва продукту",
+            StringKey.FOOD_CATEGORY_LABEL to "Категорія",
+            StringKey.FOOD_KCAL_100G_LABEL to "Ккал на 100 г",
+
+            StringKey.ADMIN_TAB_FAMILY to "Сім'я & Гості",
+            StringKey.ADMIN_TAB_REQUISITES to "Реквізити",
+            StringKey.ADMIN_TAB_TIERS_JSON to "Тарифи & JSON",
+            StringKey.ADMIN_FAMILY_TITLE to "Сімейний VIP доступ НАЗАВЖДИ 👑",
+            StringKey.ADMIN_FAMILY_DESC to "Безстроковий доступ до всіх функцій для близьких",
+            StringKey.ADMIN_FAMILY_SHARE_BTN to "Надіслати сім'ї",
+            StringKey.ADMIN_COPY_CODE to "Код",
+            StringKey.ADMIN_QUICK_GUEST_LINKS to "Швидкі гостьові інвайти:",
+            StringKey.ADMIN_GUEST_SLIM_7D to "Гостьовий Slim (7 днів)",
+            StringKey.ADMIN_GUEST_PREMIUM_7D to "Пробний Premium (7 днів)",
+            StringKey.ADMIN_GUEST_PREMIUM_30D to "Повний Premium (30 днів)",
+            StringKey.ADMIN_SHARE_ACTION to "Поділитися",
+            StringKey.ADMIN_CUSTOM_INVITE_CREATE to "Створити свій промокод",
+            StringKey.ADMIN_CUSTOM_INVITE_HIDE to "Сховати конструктор",
+            StringKey.ADMIN_ACTIVE_INVITES_LIST to "Активні коди",
+            StringKey.ADMIN_DURATION_FOREVER to "Безстроково 👑",
+
+            StringKey.TIP_1_TITLE to "1. Дефіцит калорій — основа",
+            StringKey.TIP_1_SUBTITLE to "Закон енергетичного балансу",
+            StringKey.TIP_1_CONTENT to "Витрачайте на 400–500 ккал більше, ніж споживаєте. Це забезпечує стабільне спалювання жиру без голодувань та зривів.",
+            StringKey.TIP_2_TITLE to "2. Білок захищає м'язи",
+            StringKey.TIP_2_SUBTITLE to "Норма: 1.6 – 2.0 г на 1 кг ваги",
+            StringKey.TIP_2_CONTENT to "Білкова їжа (птиця, риба, яйця, кисломолочний сир) зберігає м'язи при схудненні та надовго тамує голод.",
+            StringKey.TIP_3_TITLE to "3. Вода та коливання ваги",
+            StringKey.TIP_3_SUBTITLE to "Чому вага змінюється за добу",
+            StringKey.TIP_3_CONTENT to "Сіль та вуглеводи тимчасово затримують воду. Пийте 30 мл води на 1 кг ваги для зняття набряків і високого метаболізму.",
+            StringKey.TIP_4_TITLE to "4. Побутова активність (NEAT)",
+            StringKey.TIP_4_SUBTITLE to "Кроки важливіші за рідкісні тренування",
+            StringKey.TIP_4_CONTENT to "8 000 – 10 000 кроків на день спалюють до 400 ккал без втоми нервової системи та зайвого апетиту.",
+            StringKey.TIP_5_TITLE to "5. Як подолати плато ваги",
+            StringKey.TIP_5_SUBTITLE to "Якщо вага стоїть 2 тижні",
+            StringKey.TIP_5_CONTENT to "Враховуйте олії та соуси, стежте за вимірами талії в сантиметрах і спіть не менше 7–8 годин.",
+
+            StringKey.PROFILE_SMART_CALC_TITLE to "Авто-розрахунок за формулою",
+            StringKey.PROFILE_SMART_CALC_DESC to "Формула Міффліна-Сан Жеора під вашу вагу",
+            StringKey.PROFILE_RECALC_BTN to "Розрахувати",
+            StringKey.PROFILE_CHANGE_PLAN_BTN to "Тарифи",
+            StringKey.PROFILE_PAYMENT_BTN to "Оплата",
+            StringKey.PROFILE_PROMO_BTN to "Промокод",
+            StringKey.LANGUAGE_DROPDOWN_DESC to "Список мов",
+            StringKey.PROMO_ACTIVATION_HINT to "Введіть промокод або гостьове посилання для активації Slim або Premium",
+            StringKey.PROMO_INVALID_CODE to "Невірний код",
+            StringKey.ADMIN_PROMO_CODE_LABEL to "Промокод (VIP-FRIEND)",
+            StringKey.ADMIN_SOURCE_LABEL to "Джерело:",
+            StringKey.ADMIN_VERSION_LABEL to "Версія:",
+            StringKey.ADMIN_PAYMENT_SETTINGS_TITLE to "⚙️ Налаштування платежів",
+            StringKey.ADMIN_PAYMENT_SETTINGS_DESC to "Вкажіть реквізити для ручної оплати підписки. Доступ активується лише після підтвердженої перевірки платежу.",
+            StringKey.ADMIN_PAYMENT_METHODS_ENABLED to "Увімкнені способи оплати:",
+            StringKey.ADMIN_PAYMENT_METHODS_HINT to "Вимкніть непотрібні способи оплати, щоб показувати користувачу лише актуальні варіанти.",
+            StringKey.ADMIN_MONOBANK_SECTION to "Monobank (Україна 🇺🇦)",
+            StringKey.ADMIN_MONOBANK_CARD_LABEL to "Номер картки Monobank",
+            StringKey.ADMIN_MONOBANK_JAR_LABEL to "Посилання на банку Monobank",
+            StringKey.ADMIN_PAYPAL_SECTION to "PayPal (міжнародні платежі 🌐)",
+            StringKey.ADMIN_PAYPAL_EMAIL_LABEL to "Email акаунта PayPal",
+            StringKey.ADMIN_PAYPAL_ME_LABEL to "Посилання PayPal.Me",
+            StringKey.ADMIN_CRYPTO_SECTION to "Криптовалюта (USDT та Bitcoin)",
+            StringKey.ADMIN_USDT_ADDRESS_LABEL to "Адреса гаманця USDT",
+            StringKey.ADMIN_USDT_NETWORK_LABEL to "Мережа USDT (TRC-20, BEP-20, ERC-20)",
+            StringKey.ADMIN_BTC_ADDRESS_LABEL to "Адреса гаманця Bitcoin (BTC)",
+            StringKey.ADMIN_BANK_SECTION to "Банківська картка та IBAN",
+            StringKey.ADMIN_CARD_NUMBER_LABEL to "Номер картки Visa / MasterCard",
+            StringKey.ADMIN_CARD_HOLDER_LABEL to "Ім'я власника картки латиницею",
+            StringKey.ADMIN_IBAN_LABEL to "Розрахунковий рахунок IBAN",
+            StringKey.ADMIN_SUPPORT_CONTACTS to "Контакти підтримки для платежів",
+            StringKey.ADMIN_TELEGRAM_LABEL to "Telegram підтримки",
+            StringKey.ADMIN_SUPPORT_EMAIL_LABEL to "Email підтримки",
+            StringKey.ADMIN_PAYMENT_DETAILS_SAVED to "Реквізити оплати збережено",
+            StringKey.ADMIN_SAVE_PAYMENT_DETAILS to "Зберегти реквізити оплати ✓",
+            StringKey.SHARE_LABEL to "Поділитися",
+            StringKey.COPY_LABEL to "Копіювати"
+        ),
+
+        AppLanguage.EN to mapOf(
+            StringKey.APP_NAME to "SlimTrack",
+            StringKey.TAB_DIARY to "Diary",
+            StringKey.TAB_WEIGHT to "Weight",
+            StringKey.TAB_FOODS to "Foods",
+            StringKey.TAB_INSIGHTS to "Tips",
+            StringKey.TAB_PROFILE to "Profile",
+            StringKey.HEADER_PLANS_BTN to "Plans ⭐",
+            StringKey.GUEST_ACCESS_FOREVER to "Lifetime 👑",
+            StringKey.GUEST_ACCESS_DAYS_LEFT to "Days left:",
+            StringKey.GUEST_ACCESS_ACTIVE_CODE to "Active • Code:",
+
+            StringKey.SAVE to "Save",
+            StringKey.CANCEL to "Cancel",
+            StringKey.CLOSE to "Close",
+            StringKey.DELETE to "Delete",
+            StringKey.EDIT to "Edit",
+            StringKey.SEARCH to "Search",
+            StringKey.ADD to "Add",
+            StringKey.COPY to "Copy",
+            StringKey.SHARE to "Share",
+            StringKey.LOADING to "Loading...",
+            StringKey.ERROR to "Error",
+            StringKey.SUCCESS to "Success",
+            StringKey.UNLOCKED to "Unlocked",
+            StringKey.LOCKED to "Locked",
+            StringKey.PRO_REQUIRED to "Slim ($20) Required",
+            StringKey.PREMIUM_REQUIRED to "Premium ($50) Required",
+            StringKey.ACTIVE_BADGE to "Active",
+
+            StringKey.LANGUAGE_TITLE to "App Language",
+            StringKey.SELECT_LANGUAGE to "Select interface language",
+
+            StringKey.SUBSCRIPTION_TITLE to "Subscription Plans",
+            StringKey.CURRENT_PLAN to "Current Plan",
+            StringKey.PLAN_FREE to "Free Plan",
+            StringKey.PLAN_SLIM to "Slim ($20)",
+            StringKey.PLAN_PREMIUM to "Premium ($50)",
+            StringKey.PLAN_ADMIN to "Admin (VIP)",
+            StringKey.FREE_PRICE to "$0",
+            StringKey.SLIM_PRICE to "$20",
+            StringKey.PREMIUM_PRICE to "$50",
+            StringKey.UPGRADE_PLAN to "Upgrade Plan",
+            StringKey.UNLOCK_ALL to "Unlock All Features",
+            StringKey.PAYWALL_TITLE to "Unlock Full SlimTrack Power",
+            StringKey.PAYWALL_SUBTITLE to "Choose the right plan for faster, sustainable weight loss",
+            StringKey.PAYWALL_FEATURE_LOCKED_FMT to "Feature available in plan",
+            StringKey.PAYWALL_ALREADY_ACTIVE to "Plan already active ✓",
+            StringKey.PAYWALL_BUY_BTN_FMT to "Pay for",
+            StringKey.PAYWALL_SELECT_FREE to "Select Free Plan",
+            StringKey.PAYWALL_HAVE_PROMO to "🎁 Have a promo code or invite link?",
+            StringKey.PAYWALL_SECURITY_NOTE to "🔒 Instant activation & digital receipt",
+            StringKey.CHOOSE_PLAN to "Select Plan",
+            StringKey.POPULAR_CHOICE to "Popular 🔥",
+            StringKey.BEST_VALUE to "VIP 👑",
+
+            StringKey.ADMIN_PANEL_TITLE to "Administrator Panel",
+            StringKey.ADMIN_PANEL_SUBTITLE to "Manage invites, payments & app updates",
+            StringKey.ADMIN_FILE_IMPORT_TITLE to "Import Config File (.json)",
+            StringKey.ADMIN_FILE_IMPORT_DESC to "Upload a JSON file to update pricing, features or food database",
+            StringKey.ADMIN_IMPORT_BUTTON to "Upload .JSON",
+            StringKey.ADMIN_EXPORT_BUTTON to "Copy JSON",
+            StringKey.ADMIN_RESET_BUTTON to "Reset Defaults",
+            StringKey.ADMIN_TIER_SIMULATOR to "Tier Simulator",
+            StringKey.ADMIN_CONFIG_STATUS to "Configuration Status",
+            StringKey.ADMIN_CONFIG_SOURCE_DEFAULT to "Built-in",
+            StringKey.ADMIN_CONFIG_SOURCE_FILE to "From file",
+            StringKey.ADMIN_CONFIG_UPDATED to "Updated",
+            StringKey.ADMIN_VIEW_JSON to "Show JSON",
+            StringKey.ADMIN_SUCCESS_IMPORT to "Configuration applied!",
+            StringKey.ADMIN_ERROR_IMPORT to "Failed to read config file",
+            StringKey.ADMIN_EXTRA_FOODS_IMPORTED to "Imported foods",
+
+            StringKey.DIARY_CALORIES_LEFT to "Left",
+            StringKey.DIARY_CONSUMED to "Eaten",
+            StringKey.DIARY_BURNED to "Burned",
+            StringKey.DIARY_TARGET to "Goal",
+            StringKey.DIARY_PROTEIN to "Protein",
+            StringKey.DIARY_FAT to "Fat",
+            StringKey.DIARY_CARBS to "Carbs",
+            StringKey.DIARY_MEAL_BREAKFAST to "Breakfast",
+            StringKey.DIARY_MEAL_LUNCH to "Lunch",
+            StringKey.DIARY_MEAL_DINNER to "Dinner",
+            StringKey.DIARY_MEAL_SNACKS to "Snacks",
+            StringKey.DIARY_ADD_FOOD to "Add",
+            StringKey.DIARY_QUICK_CALORIES to "Quick kcal",
+            StringKey.DIARY_COPY_YESTERDAY to "Yesterday",
+            StringKey.DIARY_FASTING_TIMER to "Intermittent Fasting",
+            StringKey.DIARY_FASTING_START to "Start",
+            StringKey.DIARY_FASTING_STOP to "Stop",
+            StringKey.DIARY_WATER_TRACKER to "Water Tracker",
+            StringKey.DIARY_ADD_EXERCISE to "Activity",
+            StringKey.DIARY_BARCODE_SCANNER to "Barcode",
+
+            StringKey.WEIGHT_TITLE to "Weight Progress",
+            StringKey.WEIGHT_CURRENT to "Current",
+            StringKey.WEIGHT_START to "Start",
+            StringKey.WEIGHT_TARGET to "Goal",
+            StringKey.WEIGHT_TREND to "Trend Weight",
+            StringKey.WEIGHT_LOG_BUTTON to "Log Weight",
+            StringKey.WEIGHT_CHART_TITLE to "Weight History Chart",
+            StringKey.WEIGHT_MEASUREMENTS_TITLE to "Body Measurements",
+            StringKey.WEIGHT_WEEKLY_DEFICIT_TITLE to "Weekly Calorie Deficit",
+
+            StringKey.FOOD_SEARCH_PLACEHOLDER to "Search food items...",
+            StringKey.FOOD_ALL_CATEGORIES to "All Categories",
+            StringKey.FOOD_CREATE_CUSTOM to "Create Food",
+
+            StringKey.INSIGHTS_TITLE to "Insights & Tips",
+            StringKey.INSIGHTS_STREAKS to "Habit Streaks",
+            StringKey.INSIGHTS_WEEKLY_CHART to "7-Day Calorie Balance",
+            StringKey.INSIGHTS_EXPORT_REPORT to "Export Report for Coach/Doctor",
+
+            StringKey.PROFILE_TITLE to "Profile & Goals",
+            StringKey.PROFILE_SUBTITLE to "Personal Calorie Deficit Calculator",
+            StringKey.PROFILE_PERSONAL_DATA to "Personal Body Parameters",
+            StringKey.PROFILE_GENDER to "Gender",
+            StringKey.GENDER_MALE to "Male",
+            StringKey.GENDER_FEMALE to "Female",
+            StringKey.PROFILE_AGE to "Age (years)",
+            StringKey.PROFILE_HEIGHT to "Height (cm)",
+            StringKey.PROFILE_START_WEIGHT to "Start Weight (kg)",
+            StringKey.PROFILE_CURRENT_WEIGHT to "Current Weight (kg)",
+            StringKey.PROFILE_TARGET_WEIGHT to "Goal Weight (kg)",
+            StringKey.PROFILE_ACTIVITY_LEVEL to "Lifestyle & Activity Level",
+            StringKey.PROFILE_GOAL_PACE to "Weight Loss Pace",
+            StringKey.PROFILE_MACROS_TITLE to "Daily Nutrition Goals (Macros)",
+            StringKey.PROFILE_CALORIES_GOAL to "Calorie Goal (kcal)",
+            StringKey.PROFILE_PROTEIN_GOAL to "Protein (g)",
+            StringKey.PROFILE_FAT_GOAL to "Fat (g)",
+            StringKey.PROFILE_CARBS_GOAL to "Carbs (g)",
+            StringKey.PROFILE_WATER_GOAL to "Water Goal (ml)",
+            StringKey.PROFILE_AUTO_CALC to "Recalculate Goals",
+            StringKey.PROFILE_SAVE_SETTINGS to "Save Settings",
+            StringKey.PROFILE_SAVED_SUCCESS to "Settings saved! ✓",
+            StringKey.PROFILE_VALIDATION_FIX_ERRORS to "Check the highlighted fields before saving.",
+            StringKey.PROFILE_ERROR_NAME_TOO_LONG to "Name is too long.",
+            StringKey.PROFILE_ERROR_ADULT_ONLY to "SlimTrack automatic calculations are available only for users age 18+.",
+            StringKey.PROFILE_ERROR_AGE_RANGE to "Enter an age from 18 to 100.",
+            StringKey.PROFILE_ERROR_HEIGHT_RANGE to "Enter a height from 120 to 230 cm.",
+            StringKey.PROFILE_ERROR_WEIGHT_RANGE to "Enter a weight from 30 to 250 kg.",
+            StringKey.PROFILE_ERROR_TARGET_ABOVE_CURRENT to "In weight-loss mode, the goal cannot be above the current weight.",
+            StringKey.PROFILE_ERROR_TARGET_TOO_LOW to "This goal is outside the supported range for self-guided weight loss.",
+            StringKey.PROFILE_ERROR_CALORIES_RANGE to "Enter a supported daily calorie target.",
+            StringKey.PROFILE_ERROR_MACRO_RANGE to "Enter a supported macronutrient value.",
+            StringKey.PROFILE_ERROR_WATER_RANGE to "Enter a water goal from 500 to 6000 ml.",
+            StringKey.PROFILE_SAFE_CALC_NOTE to "Auto-calculation is adult-only and limits excessive calorie deficits.",
+
+            StringKey.ACTIVITY_SEDENTARY to "Sedentary Lifestyle",
+            StringKey.ACTIVITY_SEDENTARY_DESC to "Desk job, minimal movement",
+            StringKey.ACTIVITY_LIGHT to "Light Activity",
+            StringKey.ACTIVITY_LIGHT_DESC to "Workouts or brisk walks 1–3x/week",
+            StringKey.ACTIVITY_MODERATE to "Moderate Activity",
+            StringKey.ACTIVITY_MODERATE_DESC to "Regular workouts 3–5x/week",
+            StringKey.ACTIVITY_ACTIVE to "High Activity",
+            StringKey.ACTIVITY_ACTIVE_DESC to "Intense training 6–7x/week",
+
+            StringKey.PACE_EASY to "Gentle (-0.25 kg/wk)",
+            StringKey.PACE_RECOMMENDED to "Optimal (-0.5 kg/wk)",
+            StringKey.PACE_FAST to "Fast (-0.75 kg/wk)",
+            StringKey.PACE_MAX to "Maximum (-1.0 kg/wk)",
+
+            StringKey.ANALYSIS_RESULT_TITLE to "Body Parameters Analysis",
+            StringKey.ANALYSIS_RESULT_SUBTITLE to "BMI, daily calorie burn & timeline forecast",
+            StringKey.ANALYSIS_BMI_LABEL to "Body Mass Index (BMI)",
+            StringKey.BMI_UNDERWEIGHT to "Underweight",
+            StringKey.BMI_NORMAL to "Healthy Weight ✓",
+            StringKey.BMI_OVERWEIGHT to "Overweight",
+            StringKey.BMI_OBESITY to "Obesity",
+            StringKey.ANALYSIS_IDEAL_WEIGHT_RANGE to "Healthy Range",
+            StringKey.ANALYSIS_DIFF_TO_GOAL to "To Goal",
+            StringKey.ANALYSIS_TO_LOSE to "To lose",
+            StringKey.ANALYSIS_TO_GAIN to "To gain",
+            StringKey.ANALYSIS_TDEE_LABEL to "Daily Burn (TDEE)",
+            StringKey.ANALYSIS_BMR_LABEL to "Basal Rate (BMR)",
+            StringKey.ANALYSIS_WEEKS_ESTIMATE to "Est. Timeline",
+            StringKey.ANALYSIS_HELP_BUTTON_TEXT to "Details ❔",
+
+            StringKey.EXPLAINER_DIALOG_TITLE to "Personal Body Analysis",
+            StringKey.EXPLAINER_SECTION_WHAT_IT_MEANS to "1. What Your Numbers Mean",
+            StringKey.EXPLAINER_SECTION_PROBLEMS to "2. Health Impact",
+            StringKey.EXPLAINER_SECTION_HOW_TO_IMPROVE to "3. How to Improve Safely",
+            StringKey.EXPLAINER_SECTION_HOW_APP_HELPS to "4. How SlimTrack Helps",
+            StringKey.EXPLAINER_SECTION_MOTIVATION to "5. Daily Motivation",
+            StringKey.EXPLAINER_GOT_IT_BUTTON to "Got it, let's go! ✓",
+
+            StringKey.LEAD_MAGNET_TITLE to "Unlock 100% of SlimTrack PRO",
+            StringKey.LEAD_MAGNET_SUBTITLE to "Barcode scanner, body analysis, fasting & auto-macros",
+            StringKey.LEAD_MAGNET_PERK_1 to "Barcode scanner & quick calorie entry",
+            StringKey.LEAD_MAGNET_PERK_2 to "Clinical BMI analysis & goal week forecast",
+            StringKey.LEAD_MAGNET_PERK_3 to "16:8 fasting timer & full report export",
+            StringKey.LEAD_MAGNET_BUTTON to "Plans & Offers ⭐",
+
+            StringKey.DIARY_WATER_HINT to "Boosts metabolism & fullness",
+            StringKey.DIARY_EXERCISE_TITLE to "Exercise & Activity",
+            StringKey.DIARY_EXERCISE_HINT to "Adds burned calories to budget",
+            StringKey.DIARY_NO_ITEMS_YET to "No entries yet",
+            StringKey.DIARY_HABITS_TITLE to "Habit Tracker",
+            StringKey.DIARY_HABITS_DESC to "Daily discipline checklist",
+            StringKey.DIARY_OPEN_HABITS to "Open",
+            StringKey.DIARY_CALORIES_OVER to "exceeded",
+            StringKey.DIARY_CURRENT_DEFICIT to "Deficit:",
+            StringKey.DIARY_CURRENT_SURPLUS to "Surplus:",
+            StringKey.DIARY_MACROS_TITLE to "Macronutrients",
+
+            StringKey.ADMIN_TAB_UPDATE to "Update (.APK)",
+            StringKey.ADMIN_INSTALL_APK_BUTTON to "Install Update (.apk)",
+            StringKey.ADMIN_INSTALL_APK_DESC to "Pick the downloaded APK file to update in-place without losing data",
+            StringKey.ADMIN_APK_NO_DELETE_NOTE to "💡 No need to uninstall! Android updates the app in-place and preserves all your logs.",
+
+            StringKey.UNIT_KCAL to "kcal",
+            StringKey.UNIT_GRAM to "g",
+            StringKey.UNIT_ML to "ml",
+            StringKey.UNIT_CM to "cm",
+            StringKey.UNIT_MIN to "min",
+
+            StringKey.INSIGHTS_SUBTITLE to "Science-backed sustainable weight loss",
+            StringKey.INSIGHTS_FASTING_TITLE to "Intermittent Fasting 16:8",
+            StringKey.INSIGHTS_FASTING_ACTIVE to "Active fasting window",
+            StringKey.INSIGHTS_FASTING_STOPPED to "Timer stopped",
+            StringKey.INSIGHTS_FASTING_BTN_START to "Start",
+            StringKey.INSIGHTS_FASTING_BTN_STOP to "Stop",
+            StringKey.INSIGHTS_RULES_TITLE to "5 Golden Rules of Fat Loss",
+
+            StringKey.WEIGHT_HEADER_SUBTITLE to "Track body weight and measurements",
+            StringKey.WEIGHT_ADD_BUTTON to "Log Weight",
+            StringKey.WEIGHT_LOST_LABEL to "Lost",
+            StringKey.WEIGHT_REMAINING_LABEL to "To Goal",
+            StringKey.WEIGHT_WEEKS_LABEL to "Weeks",
+            StringKey.WEIGHT_PROGRESS_TO_GOAL to "Goal Progress",
+            StringKey.WEIGHT_FORECAST_TEXT to "Est. time to goal: ≈",
+            StringKey.WEIGHT_HISTORY_TITLE to "Weight Log History",
+            StringKey.WEIGHT_EMPTY_HISTORY to "No entries yet. Tap 'Log Weight'!",
+            StringKey.WEIGHT_UNIT_KG to "kg",
+
+            StringKey.CHART_SUBTITLE to "Body weight trend over time",
+            StringKey.CHART_FILTER_7D to "7d",
+            StringKey.CHART_FILTER_30D to "30d",
+            StringKey.CHART_FILTER_ALL to "All",
+            StringKey.CHART_EMPTY to "No data yet. Log your weight!",
+            StringKey.CHART_ACTUAL_WEIGHT to "Weight",
+            StringKey.TREND_CARD_TITLE to "Trend Weight",
+            StringKey.TREND_CARD_SUBTITLE to "Smoothed line without water fluctuations",
+            StringKey.TREND_LABEL_TREND to "Trend",
+            StringKey.TREND_LABEL_SCALE to "Scale",
+            StringKey.TREND_INFO_GOOD to "Water retention temporarily hides progress — fat loss is on track!",
+            StringKey.TREND_INFO_NORMAL to "Weight is steadily decreasing with your calorie deficit.",
+            StringKey.WEEKLY_DEFICIT_SUBTITLE to "7-day cumulative calorie balance",
+            StringKey.WEEKLY_FAT_BURN_FORECAST to "Weekly fat burned: ≈",
+            StringKey.WEEKLY_FAT_BURN_NOTE to "7,700 kcal deficit = 1 kg of pure body fat",
+            StringKey.MEAS_TITLE to "Body Measurements",
+            StringKey.MEAS_SUBTITLE to "Circumference in cm",
+            StringKey.MEAS_WAIST to "Waist",
+            StringKey.MEAS_HIPS to "Hips",
+            StringKey.MEAS_CHEST to "Chest",
+            StringKey.MEAS_BICEP to "Bicep",
+            StringKey.MEAS_THIGH to "Thigh",
+            StringKey.MEAS_ADD_BTN to "Log",
+            StringKey.MEAS_EMPTY_HINT to "Log waist and hip measurements to track body recomposition",
+            StringKey.HABIT_STREAK_BADGE to "day streak",
+            StringKey.HABIT_1 to "Drink daily water target",
+            StringKey.HABIT_2 to "Hit daily protein target",
+            StringKey.HABIT_3 to "Stay within calorie deficit",
+            StringKey.HABIT_4 to "8,000+ steps or workout",
+            StringKey.HABIT_5 to "No food 3 hours before sleep",
+            StringKey.EXPORT_SUBTITLE to "Summary of weight & nutrition logs",
+            StringKey.EXPORT_SHARE_BTN to "Share",
+            StringKey.EXPORT_COPY_BTN to "Copy",
+            StringKey.EXPORT_COPIED_TOAST to "Report copied!",
+
+            StringKey.DIALOG_ADD_FOOD_TITLE to "Add to",
+            StringKey.DIALOG_GRAMS_LABEL to "Serving size (g)",
+            StringKey.DIALOG_EMPTY_FOODS to "No matching foods found",
+            StringKey.DIALOG_ADD_EXERCISE_TITLE to "Add Activity",
+            StringKey.DIALOG_EXERCISE_NAME_LABEL to "Workout / Activity name",
+            StringKey.DIALOG_EXERCISE_MINUTES_LABEL to "Duration (min)",
+            StringKey.DIALOG_EXERCISE_KCAL_LABEL to "Burned (kcal)",
+            StringKey.DIALOG_ADD_WEIGHT_TITLE to "Log Weight",
+            StringKey.DIALOG_WEIGHT_INPUT_LABEL to "Your weight (kg)",
+            StringKey.DIALOG_NOTE_LABEL to "Note (optional)",
+            StringKey.DIALOG_QUICK_CALORIES_TITLE to "Quick Calories",
+            StringKey.DIALOG_QUICK_CALORIES_SUBTITLE to "Instant calorie entry without searching",
+            StringKey.DIALOG_BARCODE_TITLE to "Barcode Scanner",
+            StringKey.DIALOG_BARCODE_SUBTITLE to "Point the camera at an EAN/UPC barcode or enter it manually",
+            StringKey.DIALOG_BARCODE_INPUT_LABEL to "Barcode",
+            StringKey.DIALOG_BARCODE_CAMERA_HINT to "Place the barcode inside the frame",
+            StringKey.DIALOG_BARCODE_CAMERA_PERMISSION to "Camera access is required to scan. Barcode recognition happens on the device.",
+            StringKey.DIALOG_BARCODE_GRANT_PERMISSION to "Allow camera",
+            StringKey.DIALOG_BARCODE_NOT_FOUND to "Product not found in the online catalogue. You can add the details from its label.",
+            StringKey.DIALOG_BARCODE_NETWORK_ERROR to "Cannot connect to the online catalogue. Check your internet and try again.",
+            StringKey.DIALOG_BARCODE_SERVICE_ERROR to "The online catalogue is temporarily unavailable. Try again later.",
+            StringKey.DIALOG_BARCODE_INCOMPLETE to "Product found, but calories or macros are incomplete. Enter the values per 100 g from its label.",
+            StringKey.DIALOG_BARCODE_INVALID_CODE to "Enter a barcode with 8, 12, 13 or 14 digits.",
+            StringKey.DIALOG_BARCODE_SOURCE to "Online catalogue: Open Food Facts • ODbL",
+            StringKey.DIALOG_BARCODE_ADD_MANUALLY to "Add details from the label",
+            StringKey.DIALOG_BARCODE_SAVE_ERROR to "Could not save this product. Please try again.",
+            StringKey.DIALOG_BARCODE_SCAN_AGAIN to "Scan again",
+            StringKey.DIALOG_BARCODE_CAMERA_ERROR to "Could not start the camera. You can enter the code manually.",
+            StringKey.DIALOG_BARCODE_MANUAL_HINT to "Or enter the code manually",
+            StringKey.DIALOG_BARCODE_SEARCHING to "Searching online…",
+            StringKey.DIALOG_PROMO_TITLE to "Promo Code or Invite Link",
+            StringKey.DIALOG_PROMO_SUBTITLE to "Enter an invite code to unlock Slim / Premium",
+            StringKey.DIALOG_PROMO_INPUT_LABEL to "Promo code or link",
+            StringKey.DIALOG_PROMO_ACTIVATE_BTN to "Activate Access ✓",
+            StringKey.DIALOG_PAYMENT_TITLE to "Subscription Checkout",
+            StringKey.DIALOG_PAYMENT_SELECT_METHOD to "Choose payment method:",
+            StringKey.DIALOG_PAYMENT_REQUISITES_HEADER to "Payment details:",
+            StringKey.DIALOG_PAYMENT_AMOUNT_TO_PAY to "Amount due:",
+            StringKey.DIALOG_PAYMENT_NOTE_LABEL to "Reference / Name / TXID",
+            StringKey.DIALOG_PAYMENT_CONFIRM_BTN to "I Paid — Create Verification Request",
+            StringKey.DIALOG_PAYMENT_SECURITY_FOOTER to "🔒 Access is activated only after payment verification",
+            StringKey.DIALOG_RECEIPT_TITLE to "Verification Request Created",
+            StringKey.DIALOG_RECEIPT_SUBTITLE_FMT to "Send the request to support. Access is not active yet",
+            StringKey.DIALOG_RECEIPT_PENDING_BADGE to "PENDING",
+            StringKey.DIALOG_RECEIPT_ORDER_ID to "Order ID:",
+            StringKey.DIALOG_RECEIPT_DATE to "Date & Time:",
+            StringKey.DIALOG_RECEIPT_METHOD to "Payment Method:",
+            StringKey.DIALOG_RECEIPT_TOTAL to "Total:",
+            StringKey.DIALOG_RECEIPT_DONE_BTN to "Done",
+            StringKey.ADMIN_REQUISITES_HEADER to "⚙️ Payment Requisites Setup",
+            StringKey.ADMIN_REQUISITES_SUBTITLE to "Configure your cards and wallets for receiving payments",
+            StringKey.ADMIN_REQUISITES_ENABLED_METHODS to "Enabled payment methods:",
+            StringKey.ADMIN_REQUISITES_SAVE_BTN to "Save Requisites ✓",
+            StringKey.ADMIN_REQUISITES_SAVED_TOAST to "Payment details saved!",
+
+            StringKey.FOODS_TITLE to "Food Database",
+            StringKey.FOODS_SUBTITLE to "Calories & macros per 100g",
+            StringKey.FOODS_SEARCH_HINT to "Search foods...",
+            StringKey.FOODS_CAT_ALL to "All",
+            StringKey.FOODS_CAT_MEAT to "Meat & Poultry",
+            StringKey.FOODS_CAT_FISH to "Fish",
+            StringKey.FOODS_CAT_GRAINS to "Grains",
+            StringKey.FOODS_CAT_DAIRY to "Dairy",
+            StringKey.FOODS_CAT_VEG to "Vegetables",
+            StringKey.FOODS_CAT_FRUITS to "Fruits",
+            StringKey.FOODS_CAT_SNACKS to "Nuts & Snacks",
+            StringKey.FOODS_CREATE_BTN to "Custom Food",
+            StringKey.FOOD_CUSTOM_BADGE to "Custom",
+            StringKey.FOOD_NAME_LABEL to "Food name",
+            StringKey.FOOD_CATEGORY_LABEL to "Category",
+            StringKey.FOOD_KCAL_100G_LABEL to "Kcal per 100g",
+
+            StringKey.ADMIN_TAB_FAMILY to "Family & Guests",
+            StringKey.ADMIN_TAB_REQUISITES to "Requisites",
+            StringKey.ADMIN_TAB_TIERS_JSON to "Plans & JSON",
+            StringKey.ADMIN_FAMILY_TITLE to "Lifetime Family VIP Access 👑",
+            StringKey.ADMIN_FAMILY_DESC to "Unlimited permanent PRO access for family & close friends",
+            StringKey.ADMIN_FAMILY_SHARE_BTN to "Share to Family",
+            StringKey.ADMIN_COPY_CODE to "Code",
+            StringKey.ADMIN_QUICK_GUEST_LINKS to "Quick Guest Invites:",
+            StringKey.ADMIN_GUEST_SLIM_7D to "Guest Slim Pass (7 Days)",
+            StringKey.ADMIN_GUEST_PREMIUM_7D to "Trial Premium Pass (7 Days)",
+            StringKey.ADMIN_GUEST_PREMIUM_30D to "Full Premium Pass (30 Days)",
+            StringKey.ADMIN_SHARE_ACTION to "Share",
+            StringKey.ADMIN_CUSTOM_INVITE_CREATE to "Create Custom Promo Code",
+            StringKey.ADMIN_CUSTOM_INVITE_HIDE to "Hide Builder",
+            StringKey.ADMIN_ACTIVE_INVITES_LIST to "Active Codes",
+            StringKey.ADMIN_DURATION_FOREVER to "Lifetime 👑",
+
+            StringKey.TIP_1_TITLE to "1. Calorie Deficit is Key",
+            StringKey.TIP_1_SUBTITLE to "The Law of Energy Balance",
+            StringKey.TIP_1_CONTENT to "Burn 400–500 kcal more than you eat daily. This drives steady fat loss without extreme hunger or rebounds.",
+            StringKey.TIP_2_TITLE to "2. Protein Protects Muscle",
+            StringKey.TIP_2_SUBTITLE to "Target: 1.6 – 2.0 g per kg of weight",
+            StringKey.TIP_2_CONTENT to "Protein-rich foods (poultry, fish, eggs, cottage cheese) preserve lean muscle mass and keep you full.",
+            StringKey.TIP_3_TITLE to "3. Water & Scale Fluctuations",
+            StringKey.TIP_3_SUBTITLE to "Why weight shifts overnight",
+            StringKey.TIP_3_CONTENT to "Carbs and salt hold water temporarily. Drink 30 ml of water per kg of weight to reduce bloating and boost metabolism.",
+            StringKey.TIP_4_TITLE to "4. Daily Non-Exercise Activity (NEAT)",
+            StringKey.TIP_4_SUBTITLE to "Daily steps beat occasional workouts",
+            StringKey.TIP_4_CONTENT to "8,000 – 10,000 steps per day burn up to 400 kcal effortlessly without spiking appetite.",
+            StringKey.TIP_5_TITLE to "5. Breaking a Weight Plateau",
+            StringKey.TIP_5_SUBTITLE to "When weight stalls for 2 weeks",
+            StringKey.TIP_5_CONTENT to "Track cooking oils and sauces, measure waist circumference in cm, and get 7–8 hours of quality sleep.",
+
+            StringKey.PROFILE_SMART_CALC_TITLE to "Smart Formula Calculator",
+            StringKey.PROFILE_SMART_CALC_DESC to "Mifflin-St Jeor tailored to your body",
+            StringKey.PROFILE_RECALC_BTN to "Calculate",
+            StringKey.PROFILE_CHANGE_PLAN_BTN to "Plans",
+            StringKey.PROFILE_PAYMENT_BTN to "Payment",
+            StringKey.PROFILE_PROMO_BTN to "Promo Code",
+            StringKey.LANGUAGE_DROPDOWN_DESC to "Language list",
+            StringKey.PROMO_ACTIVATION_HINT to "Enter a promo code or guest link to activate Slim or Premium",
+            StringKey.PROMO_INVALID_CODE to "Invalid code",
+            StringKey.ADMIN_PROMO_CODE_LABEL to "Promo code (VIP-FRIEND)",
+            StringKey.ADMIN_SOURCE_LABEL to "Source:",
+            StringKey.ADMIN_VERSION_LABEL to "Version:",
+            StringKey.ADMIN_PAYMENT_SETTINGS_TITLE to "⚙️ Payment settings",
+            StringKey.ADMIN_PAYMENT_SETTINGS_DESC to "Set the details for manual subscription payments. Access is activated only after verified payment confirmation.",
+            StringKey.ADMIN_PAYMENT_METHODS_ENABLED to "Enabled payment methods:",
+            StringKey.ADMIN_PAYMENT_METHODS_HINT to "Disable unused methods so users only see currently available payment options.",
+            StringKey.ADMIN_MONOBANK_SECTION to "Monobank (Ukraine 🇺🇦)",
+            StringKey.ADMIN_MONOBANK_CARD_LABEL to "Monobank card number",
+            StringKey.ADMIN_MONOBANK_JAR_LABEL to "Monobank Jar link",
+            StringKey.ADMIN_PAYPAL_SECTION to "PayPal (international 🌐)",
+            StringKey.ADMIN_PAYPAL_EMAIL_LABEL to "PayPal account email",
+            StringKey.ADMIN_PAYPAL_ME_LABEL to "PayPal.Me link",
+            StringKey.ADMIN_CRYPTO_SECTION to "Crypto (USDT and Bitcoin)",
+            StringKey.ADMIN_USDT_ADDRESS_LABEL to "USDT wallet address",
+            StringKey.ADMIN_USDT_NETWORK_LABEL to "USDT network (TRC-20, BEP-20, ERC-20)",
+            StringKey.ADMIN_BTC_ADDRESS_LABEL to "Bitcoin (BTC) wallet address",
+            StringKey.ADMIN_BANK_SECTION to "Bank card and IBAN",
+            StringKey.ADMIN_CARD_NUMBER_LABEL to "Visa / MasterCard number",
+            StringKey.ADMIN_CARD_HOLDER_LABEL to "Cardholder name in Latin characters",
+            StringKey.ADMIN_IBAN_LABEL to "IBAN account",
+            StringKey.ADMIN_SUPPORT_CONTACTS to "Payment support contacts",
+            StringKey.ADMIN_TELEGRAM_LABEL to "Support Telegram",
+            StringKey.ADMIN_SUPPORT_EMAIL_LABEL to "Support email",
+            StringKey.ADMIN_PAYMENT_DETAILS_SAVED to "Payment details saved",
+            StringKey.ADMIN_SAVE_PAYMENT_DETAILS to "Save payment details ✓",
+            StringKey.SHARE_LABEL to "Share",
+            StringKey.COPY_LABEL to "Copy"
+        )
+    )
+
+    private val foodTranslationsEn = mapOf(
+        "Куриная грудка (отварная)" to "Boiled Chicken Breast",
+        "Грудка индейки (запеченная)" to "Baked Turkey Breast",
+        "Говядина нежирная" to "Lean Beef",
+        "Куриные котлеты на пару" to "Steamed Chicken Cutlets",
+        "Лосось / Семга запеченная" to "Baked Salmon",
+        "Тунец в собственном соку" to "Canned Tuna in Water",
+        "Минтай отварной" to "Boiled Pollock",
+        "Креветки отварные" to "Boiled Shrimp",
+        "Яйцо куриное вареное (1 шт)" to "Boiled Egg (1 pc)",
+        "Яйцо куриное вареное" to "Boiled Egg",
+        "Яичный белок" to "Egg Whites",
+        "Творог 5%" to "Cottage Cheese 5%",
+        "Творог 0.5% (обезжиренный)" to "Low-Fat Cottage Cheese 0.5%",
+        "Греческий йогурт 2%" to "Greek Yogurt 2%",
+        "Кефир 1%" to "Kefir 1%",
+        "Сыр Моцарелла Light" to "Light Mozzarella Cheese",
+        "Гречневая каша (вареная)" to "Boiled Buckwheat",
+        "Овсянка на воде" to "Oatmeal (with water)",
+        "Рис бурый (вареный)" to "Boiled Brown Rice",
+        "Рис белый басмати" to "White Basmati Rice",
+        "Макароны тв. сортов (вареные)" to "Boiled Durum Pasta",
+        "Картофель отварной" to "Boiled Potatoes",
+        "Хлеб цельнозерновой" to "Whole Grain Bread",
+        "Хлебцы ржаные" to "Rye Crispbread",
+        "Огурец свежий" to "Fresh Cucumber",
+        "Помидор свежий" to "Fresh Tomato",
+        "Брокколи на пару" to "Steamed Broccoli",
+        "Салат Айсберг / Шпинат" to "Iceberg Lettuce / Spinach",
+        "Болгарский перец" to "Bell Pepper",
+        "Яблоко зеленое" to "Green Apple",
+        "Банан" to "Banana",
+        "Клубника / Черника" to "Strawberries / Blueberries",
+        "Апельсин / Грейпфрут" to "Orange / Grapefruit",
+        "Авокадо" to "Avocado",
+        "Оливковое масло" to "Olive Oil",
+        "Миндаль" to "Almonds",
+        "Грецкие орехи" to "Walnuts",
+        "Протеин сывороточный (Whey)" to "Whey Protein Isolate",
+        "Протеиновый батончик без сахара" to "Sugar-Free Protein Bar",
+        "Темный шоколад 85%" to "Dark Chocolate 85%",
+        "Шоколад темный 85%" to "Dark Chocolate 85%",
+        "Быстрые калории" to "Quick Calories",
+        "Кофе с молоком / Перекус" to "Coffee with Milk / Snack",
+        "Легкий перекус" to "Light Snack",
+        "Полноценное блюдо" to "Full Meal",
+        "Праздничное блюдо / Десерт" to "Treat / Dessert"
+    )
+
+    private val foodTranslationsUk = mapOf(
+        "Куриная грудка (отварная)" to "Куряча грудка (відварна)",
+        "Грудка индейки (запеченная)" to "Грудка індички (запечена)",
+        "Говядина нежирная" to "Яловичина нежирна",
+        "Куриные котлеты на пару" to "Курячі котлети на парі",
+        "Лосось / Семга запеченная" to "Лосось / Сьомга запечена",
+        "Тунец в собственном соку" to "Тунець у власному соку",
+        "Минтай отварной" to "Мінтай відварний",
+        "Креветки отварные" to "Креветки відварні",
+        "Яйцо куриное вареное (1 шт)" to "Яйце куряче варене (1 шт)",
+        "Яйцо куриное вареное" to "Яйце куряче варене",
+        "Яичный белок" to "Яєчний білок",
+        "Творог 5%" to "Кисломолочний сир 5%",
+        "Творог 0.5% (обезжиренный)" to "Сир кисломолочний 0.5%",
+        "Греческий йогурт 2%" to "Грецький йогурт 2%",
+        "Кефир 1%" to "Кефір 1%",
+        "Сыр Моцарелла Light" to "Сир Моцарела Light",
+        "Гречневая каша (вареная)" to "Гречана каша (варена)",
+        "Овсянка на воде" to "Вівсянка на воді",
+        "Рис бурый (вареный)" to "Рис бурий (варений)",
+        "Рис белый басмати" to "Рис білий басматі",
+        "Макароны тв. сортов (вареные)" to "Макарони тв. сортів (варені)",
+        "Картофель отварной" to "Картопля відварна",
+        "Хлеб цельнозерновой" to "Хліб цільнозерновий",
+        "Хлебцы ржаные" to "Хлібці житні",
+        "Огурец свежий" to "Огірок свіжий",
+        "Помидор свежий" to "Помідор свіжий",
+        "Брокколи на пару" to "Броколі на парі",
+        "Салат Айсберг / Шпинат" to "Салат Айсберг / Шпинат",
+        "Болгарский перец" to "Болгарський перець",
+        "Яблоко зеленое" to "Яблуко зелене",
+        "Банан" to "Банан",
+        "Клубника / Черника" to "Полуниця / Чорниця",
+        "Апельсин / Грейпфрут" to "Апельсин / Грейпфрут",
+        "Авокадо" to "Авокадо",
+        "Оливковое масло" to "Оливкова олія",
+        "Миндаль" to "Мигдаль",
+        "Грецкие орехи" to "Волоські горіхи",
+        "Протеин сывороточный (Whey)" to "Протеїн сироватковий (Whey)",
+        "Протеиновый батончик без сахара" to "Протеїновий батончик без цукру",
+        "Темный шоколад 85%" to "Темний шоколад 85%",
+        "Шоколад темный 85%" to "Шоколад темний 85%",
+        "Быстрые калории" to "Швидкі калорії",
+        "Кофе с молоком / Перекус" to "Кава з молоком / Перекус",
+        "Легкий перекус" to "Легкий перекус",
+        "Полноценное блюдо" to "Повноцінна страва",
+        "Праздничное блюдо / Десерт" to "Святкова страва / Десерт"
+    )
+
+    private val activityTranslationsUk = mapOf(
+        "Быстрая ходьба" to "Швидка ходьба",
+        "Бег трусцой" to "Біг підтюпцем",
+        "Силовая тренировка" to "Силове тренування",
+        "Велосипед" to "Велосипед",
+        "Плавание" to "Плавання",
+        "Домашняя зарядка / Йога" to "Домашня зарядка / Йога"
+    )
+
+    private val activityTranslationsEn = mapOf(
+        "Быстрая ходьба" to "Brisk Walking",
+        "Бег трусцой" to "Jogging",
+        "Силовая тренировка" to "Strength Training",
+        "Велосипед" to "Cycling",
+        "Плавание" to "Swimming",
+        "Домашняя зарядка / Йога" to "Home Workout / Yoga"
+    )
+
+    private val noteTranslationsUk = mapOf(
+        "Старт программы" to "Старт програми",
+        "Утренний замер" to "Ранковий вимір",
+        "Замер в начале программы" to "Вимір на початку програми",
+        "Натощак" to "Натщесерце",
+        "После тренировки" to "Після тренування"
+    )
+
+    private val noteTranslationsEn = mapOf(
+        "Старт программы" to "Program Start",
+        "Утренний замер" to "Morning Check-in",
+        "Замер в начале программы" to "Initial Measurement",
+        "Натощак" to "Fasted Morning",
+        "После тренировки" to "Post-Workout"
+    )
+
+    fun translateFoodName(rawName: String, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> rawName
+            AppLanguage.UK -> foodTranslationsUk[rawName] ?: rawName
+            AppLanguage.EN -> foodTranslationsEn[rawName] ?: rawName
+        }
+    }
+
+    fun translateActivityName(rawName: String, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> rawName
+            AppLanguage.UK -> activityTranslationsUk[rawName] ?: rawName
+            AppLanguage.EN -> activityTranslationsEn[rawName] ?: rawName
+        }
+    }
+
+    fun translateNote(rawNote: String, lang: AppLanguage = _currentLanguage.value): String {
+        if (rawNote.isBlank()) return ""
+        return when (lang) {
+            AppLanguage.RU -> rawNote
+            AppLanguage.UK -> noteTranslationsUk[rawNote] ?: rawNote
+            AppLanguage.EN -> noteTranslationsEn[rawNote] ?: rawNote
+        }
+    }
+
+    fun translateCategory(rawCategory: String, lang: AppLanguage = _currentLanguage.value): String {
+        val key = when (rawCategory) {
+            "Все", "All", "Всі" -> StringKey.FOODS_CAT_ALL
+            "Мясо и птица", "Meat & Poultry", "М'ясо та птиця" -> StringKey.FOODS_CAT_MEAT
+            "Рыба", "Fish", "Риба" -> StringKey.FOODS_CAT_FISH
+            "Крупы", "Grains", "Крупи" -> StringKey.FOODS_CAT_GRAINS
+            "Молочные продукты", "Dairy", "Молочні продукти" -> StringKey.FOODS_CAT_DAIRY
+            "Овощи", "Vegetables", "Овочі" -> StringKey.FOODS_CAT_VEG
+            "Фрукты", "Fruits", "Фрукти" -> StringKey.FOODS_CAT_FRUITS
+            "Орехи и снеки", "Nuts & Snacks", "Горіхи та снеки" -> StringKey.FOODS_CAT_SNACKS
+            else -> null
+        }
+        return if (key != null) getString(key, lang) else rawCategory
+    }
+
+    fun translateFeatureTitle(feature: AppFeature, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> feature.titleRu
+            AppLanguage.EN -> feature.titleEn
+            AppLanguage.UK -> when (feature) {
+                AppFeature.FASTING_TIMER -> "Інтервальне голодування"
+                AppFeature.BODY_MEASUREMENTS -> "Виміри тіла"
+                AppFeature.TREND_WEIGHT -> "Трендова вага"
+                AppFeature.WEEKLY_DEFICIT -> "Аналіз дефіциту калорій"
+                AppFeature.EXPORT_REPORTS -> "Експорт звітів"
+                AppFeature.BARCODE_SCANNER -> "Сканер штрих-кодів"
+                AppFeature.HABIT_STREAKS -> "Трекер звичок (Streaks)"
+                AppFeature.QUICK_CALORIES -> "Швидкі калорії"
+                AppFeature.CUSTOM_FOOD -> "Створення своїх страв"
+            }
+        }
+    }
+
+    fun translatePaymentMethodTitle(method: PaymentMethodType, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> method.title
+            AppLanguage.UK -> when (method) {
+                PaymentMethodType.MONOBANK -> "Monobank (Україна 🇺🇦)"
+                PaymentMethodType.PAYPAL -> "PayPal (Міжнародний 🌍)"
+                PaymentMethodType.CRYPTO_USDT -> "USDT Tether (Криптовалюта 💎)"
+                PaymentMethodType.CRYPTO_BTC -> "Bitcoin (BTC ₿)"
+                PaymentMethodType.BANK_CARD -> "Банківська картка (Visa / MC 💳)"
+                PaymentMethodType.IBAN -> "IBAN / SEPA (Рахунок банку 🏦)"
+            }
+            AppLanguage.EN -> when (method) {
+                PaymentMethodType.MONOBANK -> "Monobank (Ukraine 🇺🇦)"
+                PaymentMethodType.PAYPAL -> "PayPal (International 🌍)"
+                PaymentMethodType.CRYPTO_USDT -> "USDT Tether (Crypto 💎)"
+                PaymentMethodType.CRYPTO_BTC -> "Bitcoin (BTC ₿)"
+                PaymentMethodType.BANK_CARD -> "Bank Card (Visa / MC 💳)"
+                PaymentMethodType.IBAN -> "IBAN / SEPA (Bank Transfer 🏦)"
+            }
+        }
+    }
+
+    fun translatePaymentMethodDesc(method: PaymentMethodType, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> method.description
+            AppLanguage.UK -> when (method) {
+                PaymentMethodType.MONOBANK -> "Переказ на картку або Монобанку"
+                PaymentMethodType.PAYPAL -> "Оплата карткою через PayPal або PayPal.Me"
+                PaymentMethodType.CRYPTO_USDT -> "TRC-20 / BEP-20 швидкий переказ без комісій"
+                PaymentMethodType.CRYPTO_BTC -> "Прямий переказ на Bitcoin адресу"
+                PaymentMethodType.BANK_CARD -> "Прямий переказ за номером картки"
+                PaymentMethodType.IBAN -> "Офіційний платіж за реквізитами IBAN"
+            }
+            AppLanguage.EN -> when (method) {
+                PaymentMethodType.MONOBANK -> "Direct transfer to Monobank card or Jar"
+                PaymentMethodType.PAYPAL -> "Pay with card via PayPal or PayPal.Me"
+                PaymentMethodType.CRYPTO_USDT -> "Fast TRC-20 / BEP-20 transfer"
+                PaymentMethodType.CRYPTO_BTC -> "Direct transfer to Bitcoin wallet"
+                PaymentMethodType.BANK_CARD -> "Direct transfer to Visa / MasterCard"
+                PaymentMethodType.IBAN -> "Official IBAN / SEPA bank transfer"
+            }
+        }
+    }
+
+    fun translateTierDescription(tier: SubscriptionTier, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> when (tier) {
+                SubscriptionTier.FREE -> "Базовый контроль веса и учет питания"
+                SubscriptionTier.SLIM -> "Продвинутый контроль тела и ускорение похудения"
+                SubscriptionTier.PREMIUM -> "Максимальный безлимит + экспорт отчетов"
+                SubscriptionTier.ADMIN -> "Полный доступ администратора"
+            }
+            AppLanguage.UK -> when (tier) {
+                SubscriptionTier.FREE -> "Базовий контроль ваги та облік харчування"
+                SubscriptionTier.SLIM -> "Просунутий контроль тіла та прискорення схуднення"
+                SubscriptionTier.PREMIUM -> "Максимальний безліміт + експорт звітів"
+                SubscriptionTier.ADMIN -> "Повний доступ адміністратора"
+            }
+            AppLanguage.EN -> when (tier) {
+                SubscriptionTier.FREE -> "Basic weight tracking & calorie diary"
+                SubscriptionTier.SLIM -> "Advanced body tracking & faster fat loss"
+                SubscriptionTier.PREMIUM -> "Unlimited PRO access + report export"
+                SubscriptionTier.ADMIN -> "Full Administrator Access"
+            }
+        }
+    }
+
+    fun translateTierPeriod(tier: SubscriptionTier, lang: AppLanguage = _currentLanguage.value): String {
+        return when (lang) {
+            AppLanguage.RU -> when (tier) {
+                SubscriptionTier.FREE -> "бесплатно"
+                SubscriptionTier.SLIM -> "/ месяц"
+                SubscriptionTier.PREMIUM -> "/ навсегда"
+                SubscriptionTier.ADMIN -> "VIP"
+            }
+            AppLanguage.UK -> when (tier) {
+                SubscriptionTier.FREE -> "безкоштовно"
+                SubscriptionTier.SLIM -> "/ місяць"
+                SubscriptionTier.PREMIUM -> "/ назавжди"
+                SubscriptionTier.ADMIN -> "VIP"
+            }
+            AppLanguage.EN -> when (tier) {
+                SubscriptionTier.FREE -> "free"
+                SubscriptionTier.SLIM -> "/ month"
+                SubscriptionTier.PREMIUM -> "/ lifetime"
+                SubscriptionTier.ADMIN -> "VIP"
+            }
+        }
+    }
+
+    fun translateTierPerks(tier: SubscriptionTier, lang: AppLanguage = _currentLanguage.value): List<String> {
+        return when (lang) {
+            AppLanguage.RU -> when (tier) {
+                SubscriptionTier.FREE -> listOf(
+                    "Дневник питания (КБЖУ) и трекер воды",
+                    "Справочник основных продуктов",
+                    "Ввод веса и базовый график"
+                )
+                SubscriptionTier.SLIM -> listOf(
+                    "Все функции Free + Сканер штрих-кодов",
+                    "Интервальное голодание 16:8 и Быстрые ккал",
+                    "Замеры тела, трендовый вес и недельный дефицит",
+                    "Трекер полезных привычек (Streaks)"
+                )
+                SubscriptionTier.PREMIUM, SubscriptionTier.ADMIN -> listOf(
+                    "Все возможности тарифа Slim без ограничений",
+                    "Экспорт отчетов для врача или тренера",
+                    "Медицинский разбор параметров тела (ИМТ, TDEE)",
+                    "Приоритетный доступ ко всем обновлениям"
+                )
+            }
+            AppLanguage.UK -> when (tier) {
+                SubscriptionTier.FREE -> listOf(
+                    "Щоденник харчування (КБЖВ) та трекер води",
+                    "Довідник основних продуктів",
+                    "Введення ваги та базовий графік"
+                )
+                SubscriptionTier.SLIM -> listOf(
+                    "Всі функції Free + Сканер штрих-кодів",
+                    "Інтервальне голодування 16:8 та Швидкі ккал",
+                    "Виміри тіла, трендова вага та тижневий дефіцит",
+                    "Трекер корисних звичок (Streaks)"
+                )
+                SubscriptionTier.PREMIUM, SubscriptionTier.ADMIN -> listOf(
+                    "Всі можливості тарифу Slim без обмежень",
+                    "Експорт звітів для лікаря або тренера",
+                    "Медичний розбір параметрів тіла (ІМТ, TDEE)",
+                    "Пріоритетний доступ до всіх оновлень"
+                )
+            }
+            AppLanguage.EN -> when (tier) {
+                SubscriptionTier.FREE -> listOf(
+                    "Calorie & macro diary + water tracker",
+                    "Core food nutrition database",
+                    "Weight logging & basic progress chart"
+                )
+                SubscriptionTier.SLIM -> listOf(
+                    "Everything in Free + Barcode Scanner",
+                    "16:8 Fasting timer & Quick Calories",
+                    "Body measurements, trend weight & weekly deficit",
+                    "Daily Habit Streaks tracker"
+                )
+                SubscriptionTier.PREMIUM, SubscriptionTier.ADMIN -> listOf(
+                    "All Slim features with zero limits",
+                    "Full progress report export for coach/doctor",
+                    "Clinical body analysis (BMI, BMR, TDEE)",
+                    "Lifetime priority access to all features"
+                )
+            }
+        }
+    }
+}
+
+val LocalAppLanguage = compositionLocalOf { AppLanguage.RU }
+
+@Composable
+fun LocalizationProvider(content: @Composable () -> Unit) {
+    val language by LocalizationManager.currentLanguage.collectAsState()
+    CompositionLocalProvider(LocalAppLanguage provides language, content = content)
+}
+
+@Composable
+fun appLanguage(): AppLanguage = LocalAppLanguage.current
+
+@Composable
+fun appString(key: StringKey): String =
+    LocalizationManager.getString(key, LocalAppLanguage.current)
+
+@Composable
+fun localizedText(ru: String, uk: String, en: String): String = when (LocalAppLanguage.current) {
+    AppLanguage.RU -> ru
+    AppLanguage.UK -> uk
+    AppLanguage.EN -> en
+}
+
+@Composable
+fun localizedFoodName(rawName: String): String =
+    LocalizationManager.translateFoodName(rawName, LocalAppLanguage.current)
+
+@Composable
+fun localizedActivityName(rawName: String): String =
+    LocalizationManager.translateActivityName(rawName, LocalAppLanguage.current)
+
+@Composable
+fun localizedNote(rawNote: String): String =
+    LocalizationManager.translateNote(rawNote, LocalAppLanguage.current)
+
+@Composable
+fun localizedCategory(rawCategory: String): String =
+    LocalizationManager.translateCategory(rawCategory, LocalAppLanguage.current)

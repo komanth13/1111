@@ -38,6 +38,16 @@ jobs:
           cp overrides/AppContainer.kt project/app/src/main/java/com/example/app/AppContainer.kt
           cp overrides/RemoteFoodDataSource.kt project/app/src/main/java/com/example/data/network/RemoteFoodDataSource.kt
           cp overrides/OpenFoodFactsClient.kt project/app/src/main/java/com/example/data/network/OpenFoodFactsClient.kt
+          mkdir -p project/app/src/main/java/com/example/domain/model
+          cp overrides/BarcodeLookupException.kt project/app/src/main/java/com/example/domain/model/BarcodeLookupException.kt
+          cp overrides/BarcodeScannerDialog.kt project/app/src/main/java/com/example/ui/components/BarcodeScannerDialog.kt
+          cp overrides/AddFoodDialog.kt project/app/src/main/java/com/example/ui/components/AddFoodDialog.kt
+          cp overrides/DiaryScreen.kt project/app/src/main/java/com/example/ui/screens/DiaryScreen.kt
+          cp overrides/FitnessViewModel.kt project/app/src/main/java/com/example/ui/viewmodel/FitnessViewModel.kt
+          cp overrides/LocalizationManager.kt project/app/src/main/java/com/example/util/LocalizationManager.kt
+          mkdir -p project/app/src/test/java/com/example/data/network
+          cp overrides/tests/OpenFoodFactsClientTest.kt project/app/src/test/java/com/example/data/network/OpenFoodFactsClientTest.kt
+          cp overrides/tests/RoomFitnessRepositoryTest.kt project/app/src/test/java/com/example/data/repository/RoomFitnessRepositoryTest.kt
           cp overrides/AndroidManifest.xml project/app/src/main/AndroidManifest.xml
           cp overrides/app-build.gradle.kts project/app/build.gradle.kts
 
@@ -71,7 +81,6 @@ jobs:
           gradle-version: '9.3.1'
 
       - name: Run unit tests
-        continue-on-error: true
         working-directory: project
         run: gradle --no-daemon testDebugUnitTest
 
@@ -90,12 +99,13 @@ jobs:
 
       - name: Rename APK
         shell: bash
-        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.3.1-stable-test.apk
+        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.3.2-online-barcode.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SlimTrack-3.3.1-stable-test-apk
-          path: SlimTrack-3.3.1-stable-test.apk
+          name: SlimTrack-3.3.2-online-barcode-apk
+          path: SlimTrack-3.3.2-online-barcode.apk
           if-no-files-found: error
           retention-days: 30
+
