@@ -28,6 +28,35 @@ class OpenFoodFactsClientTest {
         assertEquals(barcode, food.barcode)
     }
 
+    private fun modernResponse(per: String = "100g", preparation: String = "as_sold") = """
+        {"status":"success","product":{"code":"$barcode","product_name_uk":"Хліб",
+        "nutrition":{"aggregated_set":{"per":"$per","preparation":"$preparation","nutrients":{
+        "energy-kcal":{"value":240,"unit":"kcal"},"proteins":{"value":8,"unit":"g"},
+        "fat":{"value":2000,"unit":"mg"},"carbohydrates":{"value":47,"unit":"g"}}}}}}
+    """.trimIndent()
+
+    @Test fun currentApiV3NutritionIsParsedAndUnitsAreNormalized() {
+        val food = OpenFoodFactsClient().parseProduct(modernResponse(), barcode)!!
+        assertEquals(240f, food.calories, 0f)
+        assertEquals(8f, food.protein, 0f)
+        assertEquals(2f, food.fat, 0f)
+        assertEquals(47f, food.carbs, 0f)
+    }
+
+    @Test fun valuesPerServingAreNeverTreatedAsPer100Grams() {
+        val error = assertThrows(BarcodeLookupException::class.java) {
+            OpenFoodFactsClient().parseProduct(modernResponse(per = "serving"), barcode)
+        }
+        assertEquals(Reason.INCOMPLETE_NUTRITION, error.reason)
+    }
+
+    @Test fun preparedNutritionIsNeverMixedWithAsSoldValues() {
+        val error = assertThrows(BarcodeLookupException::class.java) {
+            OpenFoodFactsClient().parseProduct(modernResponse(preparation = "prepared"), barcode)
+        }
+        assertEquals(Reason.INCOMPLETE_NUTRITION, error.reason)
+    }
+
     @Test fun energyInKilojoulesIsConvertedToKcal() {
         val food = OpenFoodFactsClient().parseProduct(response(
             """"energy-kj_100g":1004.16,"proteins_100g":"8,5","fat_100g":0,"carbohydrates_100g":47"""

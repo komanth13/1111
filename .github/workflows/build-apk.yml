@@ -47,6 +47,7 @@ jobs:
           cp overrides/LocalizationManager.kt project/app/src/main/java/com/example/util/LocalizationManager.kt
           mkdir -p project/app/src/test/java/com/example/data/network
           cp overrides/tests/OpenFoodFactsClientTest.kt project/app/src/test/java/com/example/data/network/OpenFoodFactsClientTest.kt
+          cp overrides/tests/CalorieCalculatorTest.kt project/app/src/test/java/com/example/CalorieCalculatorTest.kt
           cp overrides/tests/RoomFitnessRepositoryTest.kt project/app/src/test/java/com/example/data/repository/RoomFitnessRepositoryTest.kt
           cp overrides/AndroidManifest.xml project/app/src/main/AndroidManifest.xml
           cp overrides/app-build.gradle.kts project/app/build.gradle.kts
@@ -83,6 +84,27 @@ jobs:
       - name: Run unit tests
         working-directory: project
         run: gradle --no-daemon testDebugUnitTest
+
+      - name: Smoke check live online catalogue
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 - <<'PYAPI'
+          import json, urllib.request
+          endpoint = "https://world.openfoodfacts.org/api/v3/product/3017620422003?fields=code,product_name,nutrition,nutriments"
+          request = urllib.request.Request(endpoint, headers={"User-Agent": "SlimTrack/3.3.2 (https://github.com/komanth13/1111)", "Accept": "application/json"})
+          with urllib.request.urlopen(request, timeout=20) as response:
+              data = json.load(response)
+          product = data.get("product", {})
+          assert product.get("code") == "3017620422003", "Expected known online barcode"
+          legacy = product.get("nutriments", {})
+          modern = product.get("nutrition", {}).get("aggregated_set", {})
+          assert legacy or modern, "Expected online nutrition data"
+          print("Live product:", product.get("product_name"))
+          print("Legacy fields:", sorted(legacy.keys())[:12])
+          print("Modern per:", modern.get("per"), "preparation:", modern.get("preparation"))
+          print("Modern nutrients:", sorted(modern.get("nutrients", {}).keys())[:12])
+          PYAPI
 
       - name: Build debug APK
         working-directory: project

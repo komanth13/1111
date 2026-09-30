@@ -29,7 +29,7 @@ class OpenFoodFactsClient(
 
         val fields = listOf(
             "code", "product_name", "product_name_uk", "product_name_ru", "product_name_en",
-            "brands", "categories", "categories_tags", "nutriments", "serving_quantity",
+            "brands", "categories", "categories_tags", "nutriments", "nutrition", "serving_quantity",
             "serving_quantity_unit", "serving_size"
         ).joinToString(",")
         val endpoint = URL(
@@ -101,7 +101,7 @@ class OpenFoodFactsClient(
             else -> "$productName — $brands"
         }
 
-        val nutriments = product.optJSONObject("nutriments")
+        val nutriments = nutritionPer100Grams(product)
             ?: throw BarcodeLookupException(Reason.INCOMPLETE_NUTRITION, displayName)
         // Some labels publish energy only in kJ. Missing macros must never become zero.
         val calories = nutriments.floatOrNull("energy-kcal_100g")
@@ -148,6 +148,42 @@ class OpenFoodFactsClient(
             isCustom = false,
             barcode = normalizedCode
         )
+    }
+
+    /** Accept both legacy flat fields and the current API v3 nutrition schema. */
+    private fun nutritionPer100Grams(product: JSONObject): JSONObject? {
+        val nutrition = product.optJSONObject("nutrition")
+            ?: return product.optJSONObject("nutriments")
+        val aggregate = nutrition.optJSONObject("aggregated_set") ?: return null
+        if (aggregate.optString("per") != "100g" ||
+            aggregate.optString("preparation") != "as_sold") return null
+        val nutrients = aggregate.optJSONObject("nutrients") ?: return null
+        val flat = JSONObject()
+        for (key in listOf("energy-kcal", "energy-kj", "energy", "proteins", "fat", "carbohydrates")) {
+            val entry = nutrients.optJSONObject(key) ?: continue
+            val modifier = entry.optString("modifier")
+            if (modifier.isNotBlank() && modifier != "=") continue
+            val value = entry.floatOrNull("value") ?: entry.floatOrNull("value_computed") ?: continue
+            if (!value.isFinite() || value < 0f) continue
+            val unit = entry.optString("unit").lowercase()
+            val normalized = when (key) {
+                "energy-kcal" -> if (unit == "kcal") value else continue
+                "energy-kj" -> if (unit == "kj") value else continue
+                "energy" -> when (unit) {
+                    "kcal" -> { flat.put("energy-kcal_100g", value); continue }
+                    "kj" -> { flat.put("energy-kj_100g", value); continue }
+                    else -> continue
+                }
+                else -> when (unit) {
+                    "g" -> value
+                    "mg" -> value / 1000f
+                    "µg", "μg", "ug" -> value / 1_000_000f
+                    else -> continue
+                }
+            }
+            flat.put("${key}_100g", normalized)
+        }
+        return flat
     }
 
     private fun nutritionLooksUsable(
