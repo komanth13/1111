@@ -31,9 +31,16 @@ jobs:
       - name: Apply fixed source files
         shell: bash
         run: |
+          mkdir -p project/app/src/main/java/com/example/data/network
           cp overrides/RoomFitnessRepository.kt project/app/src/main/java/com/example/data/repository/RoomFitnessRepository.kt
           cp overrides/AdminPaymentRequisitesSection.kt project/app/src/main/java/com/example/ui/components/AdminPaymentRequisitesSection.kt
           cp overrides/PaymentReceiptDialog.kt project/app/src/main/java/com/example/ui/components/PaymentReceiptDialog.kt
+          cp overrides/AppContainer.kt project/app/src/main/java/com/example/app/AppContainer.kt
+          cp overrides/RemoteFoodDataSource.kt project/app/src/main/java/com/example/data/network/RemoteFoodDataSource.kt
+          cp overrides/OpenFoodFactsClient.kt project/app/src/main/java/com/example/data/network/OpenFoodFactsClient.kt
+          cp overrides/AndroidManifest.xml project/app/src/main/AndroidManifest.xml
+          cp overrides/LocalizationManager.kt project/app/src/main/java/com/example/util/LocalizationManager.kt
+          cp overrides/app-build.gradle.kts project/app/build.gradle.kts
 
       - name: Prepare installable package identity
         shell: bash
@@ -81,12 +88,12 @@ jobs:
 
       - name: Rename APK
         shell: bash
-        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.2.1-install-test.apk
+        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.3.0-online-barcode.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SlimTrack-3.2.1-install-test-apk
-          path: SlimTrack-3.2.1-install-test.apk
+          name: SlimTrack-3.3.0-online-barcode-apk
+          path: SlimTrack-3.3.0-online-barcode.apk
           if-no-files-found: error
           retention-days: 30
