@@ -293,7 +293,8 @@ fun AddFoodDialog(
 
                             DishEstimateNote(food)
                             PreparedDishCatalog.entry(food)?.let { entry ->
-                                Text(entry.components.joinToString(", ") { localizedFoodName(it.food.name) },
+                                val ingredientNames = entry.components.map { localizedFoodName(it.food.name) }
+                                Text(ingredientNames.joinToString(", "),
                                     style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
@@ -637,4 +638,3 @@ internal fun CustomFoodForm(
         }
     }
 }
-
