@@ -30,6 +30,7 @@ import com.example.domain.analytics.WeeklyAnalyticsBuilder
 import com.example.domain.model.DailyNutritionSummary
 import com.example.domain.model.DayAnalytics
 import com.example.security.SecurityPolicy
+import com.example.data.auth.AccountManager
 import com.example.util.CalorieCalculator
 import com.example.util.ProfileValidationResult
 import com.example.util.ProfileValidator
@@ -48,10 +49,14 @@ import java.util.Locale
 @OptIn(ExperimentalCoroutinesApi::class)
 class FitnessViewModel(
     private val repository: FitnessRepository,
-    private val adminConfigManager: AdminConfigManager
+    private val adminConfigManager: AdminConfigManager,
+    val accountManager: AccountManager? = null
 ) : ViewModel() {
 
     private val weeklyAnalyticsBuilder = WeeklyAnalyticsBuilder(repository::getMealsForDateSync)
+
+    val adminAccess: StateFlow<Boolean> = SecurityPolicy.accountAccess.map { SecurityPolicy.adminToolsEnabled }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     val currentConfig: StateFlow<AppConfig> = adminConfigManager.currentConfig
     val userTier: StateFlow<SubscriptionTier> = adminConfigManager.userTier
@@ -540,12 +545,13 @@ class FitnessViewModel(
 
 class FitnessViewModelFactory(
     private val repository: FitnessRepository,
-    private val adminConfigManager: AdminConfigManager
+    private val adminConfigManager: AdminConfigManager,
+    private val accountManager: AccountManager? = null
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FitnessViewModel::class.java)) {
-            return FitnessViewModel(repository, adminConfigManager) as T
+            return FitnessViewModel(repository, adminConfigManager, accountManager) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

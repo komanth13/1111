@@ -1,6 +1,7 @@
 package com.example.app
 
 import android.content.Context
+import com.example.data.auth.AccountManager
 import com.example.data.db.AppDatabase
 import com.example.data.catalog.PreparedDishCatalog
 import com.example.data.repository.AdminConfigManager
@@ -38,7 +39,10 @@ class AppContainer(context: Context) {
         )
     }
 
+    val accountManager: AccountManager by lazy { AccountManager(appContext) }
+
     val adminConfigManager: AdminConfigManager by lazy {
+        accountManager
         AdminConfigManager.getInstance(appContext)
     }
 }

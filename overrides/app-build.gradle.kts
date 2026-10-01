@@ -1,8 +1,16 @@
+import groovy.json.JsonSlurper
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.devtools.ksp)
 }
+
+// Public client identifiers only. Never place an Admin SDK private key in the APK/repository.
+val identityFile = rootProject.file("auth/firebase-client.json")
+val identity = if (identityFile.exists()) JsonSlurper().parse(identityFile) as Map<*, *> else emptyMap<String, String>()
+fun identityValue(key: String): String = (identity[key] as? String).orEmpty().trim()
+fun quoted(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\""
 
 val releaseKeystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
 val releaseKeystore = file(releaseKeystorePath)
@@ -21,8 +29,13 @@ android {
         applicationId = "com.aistudio.slimtrack.vwnpzk.stable"
         minSdk = 24
         targetSdk = 36
-        versionCode = 14
-        versionName = "3.4.0"
+        versionCode = 15
+        versionName = "3.4.1"
+        buildConfigField("String", "FIREBASE_API_KEY", quoted(identityValue("api_key")))
+        buildConfigField("String", "FIREBASE_APP_ID", quoted(identityValue("app_id")))
+        buildConfigField("String", "FIREBASE_PROJECT_ID", quoted(identityValue("project_id")))
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", quoted(identityValue("google_web_client_id")))
+        buildConfigField("String", "ADMIN_EMAIL", quoted(identityValue("admin_email")))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -99,6 +112,12 @@ ksp {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.19.0"))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
@@ -140,4 +159,3 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
-

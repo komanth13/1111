@@ -50,6 +50,12 @@ jobs:
           shutil.copytree("overrides/assets", root / "app/src/main/assets", dirs_exist_ok=True)
           shutil.copyfile("overrides/AndroidManifest.xml", root / "app/src/main/AndroidManifest.xml")
           shutil.copyfile("overrides/app-build.gradle.kts", root / "app/build.gradle.kts")
+          identity = Path("auth/firebase-client.json")
+          if identity.exists():
+              (root / "auth").mkdir(exist_ok=True)
+              shutil.copyfile(identity, root / "auth/firebase-client.json")
+          if Path("overrides/res").exists():
+              shutil.copytree("overrides/res", root / "app/src/main/res", dirs_exist_ok=True)
           PYCOPY
 
       - name: Prepare stable test signing key
@@ -92,7 +98,7 @@ jobs:
           python3 - <<'PYAPI'
           import json, urllib.request
           endpoint = "https://world.openfoodfacts.org/api/v3/product/3017620422003?fields=code,product_name,nutrition,nutriments"
-          request = urllib.request.Request(endpoint, headers={"User-Agent": "SlimTrack/3.4.0 (https://github.com/komanth13/1111)", "Accept": "application/json"})
+          request = urllib.request.Request(endpoint, headers={"User-Agent": "SlimTrack/3.4.1 (https://github.com/komanth13/1111)", "Accept": "application/json"})
           with urllib.request.urlopen(request, timeout=20) as response:
               data = json.load(response)
           product = data.get("product", {})
@@ -121,13 +127,13 @@ jobs:
 
       - name: Rename APK
         shell: bash
-        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.4.0-prepared-dishes.apk
+        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.4.1-account-access.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SlimTrack-3.4.0-prepared-dishes-apk
-          path: SlimTrack-3.4.0-prepared-dishes.apk
+          name: SlimTrack-3.4.1-account-access-apk
+          path: SlimTrack-3.4.1-account-access.apk
           if-no-files-found: error
           retention-days: 30
 
