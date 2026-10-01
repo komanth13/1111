@@ -28,29 +28,29 @@ jobs:
           test -f project/settings.gradle.kts
           test -f project/app/build.gradle.kts
 
-      - name: Apply fixed source files
+      - name: Apply current source and catalogue
         shell: bash
         run: |
-          mkdir -p project/app/src/main/java/com/example/data/network
-          cp overrides/RoomFitnessRepository.kt project/app/src/main/java/com/example/data/repository/RoomFitnessRepository.kt
-          cp overrides/AdminPaymentRequisitesSection.kt project/app/src/main/java/com/example/ui/components/AdminPaymentRequisitesSection.kt
-          cp overrides/PaymentReceiptDialog.kt project/app/src/main/java/com/example/ui/components/PaymentReceiptDialog.kt
-          cp overrides/AppContainer.kt project/app/src/main/java/com/example/app/AppContainer.kt
-          cp overrides/RemoteFoodDataSource.kt project/app/src/main/java/com/example/data/network/RemoteFoodDataSource.kt
-          cp overrides/OpenFoodFactsClient.kt project/app/src/main/java/com/example/data/network/OpenFoodFactsClient.kt
-          mkdir -p project/app/src/main/java/com/example/domain/model
-          cp overrides/BarcodeLookupException.kt project/app/src/main/java/com/example/domain/model/BarcodeLookupException.kt
-          cp overrides/BarcodeScannerDialog.kt project/app/src/main/java/com/example/ui/components/BarcodeScannerDialog.kt
-          cp overrides/AddFoodDialog.kt project/app/src/main/java/com/example/ui/components/AddFoodDialog.kt
-          cp overrides/DiaryScreen.kt project/app/src/main/java/com/example/ui/screens/DiaryScreen.kt
-          cp overrides/FitnessViewModel.kt project/app/src/main/java/com/example/ui/viewmodel/FitnessViewModel.kt
-          cp overrides/LocalizationManager.kt project/app/src/main/java/com/example/util/LocalizationManager.kt
-          mkdir -p project/app/src/test/java/com/example/data/network
-          cp overrides/tests/OpenFoodFactsClientTest.kt project/app/src/test/java/com/example/data/network/OpenFoodFactsClientTest.kt
-          cp overrides/tests/CalorieCalculatorTest.kt project/app/src/test/java/com/example/CalorieCalculatorTest.kt
-          cp overrides/tests/RoomFitnessRepositoryTest.kt project/app/src/test/java/com/example/data/repository/RoomFitnessRepositoryTest.kt
-          cp overrides/AndroidManifest.xml project/app/src/main/AndroidManifest.xml
-          cp overrides/app-build.gradle.kts project/app/build.gradle.kts
+          python3 - <<'PYCOPY'
+          from pathlib import Path
+          import re, shutil
+          root = Path("project")
+          for source in Path("overrides").glob("*.kt"):
+              match = re.search(r"^package ([\w.]+)", source.read_text())
+              assert match, source
+              target = root / "app/src/main/java" / match[1].replace(".", "/") / source.name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(source, target)
+          for source in Path("overrides/tests").glob("*.kt"):
+              match = re.search(r"^package ([\w.]+)", source.read_text())
+              assert match, source
+              target = root / "app/src/test/java" / match[1].replace(".", "/") / source.name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(source, target)
+          shutil.copytree("overrides/assets", root / "app/src/main/assets", dirs_exist_ok=True)
+          shutil.copyfile("overrides/AndroidManifest.xml", root / "app/src/main/AndroidManifest.xml")
+          shutil.copyfile("overrides/app-build.gradle.kts", root / "app/build.gradle.kts")
+          PYCOPY
 
       - name: Prepare stable test signing key
         shell: bash
@@ -92,7 +92,7 @@ jobs:
           python3 - <<'PYAPI'
           import json, urllib.request
           endpoint = "https://world.openfoodfacts.org/api/v3/product/3017620422003?fields=code,product_name,nutrition,nutriments"
-          request = urllib.request.Request(endpoint, headers={"User-Agent": "SlimTrack/3.3.2 (https://github.com/komanth13/1111)", "Accept": "application/json"})
+          request = urllib.request.Request(endpoint, headers={"User-Agent": "SlimTrack/3.4.0 (https://github.com/komanth13/1111)", "Accept": "application/json"})
           with urllib.request.urlopen(request, timeout=20) as response:
               data = json.load(response)
           product = data.get("product", {})
@@ -121,13 +121,14 @@ jobs:
 
       - name: Rename APK
         shell: bash
-        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.3.2-online-barcode.apk
+        run: cp project/app/build/outputs/apk/debug/app-debug.apk SlimTrack-3.4.0-prepared-dishes.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: SlimTrack-3.3.2-online-barcode-apk
-          path: SlimTrack-3.3.2-online-barcode.apk
+          name: SlimTrack-3.4.0-prepared-dishes-apk
+          path: SlimTrack-3.4.0-prepared-dishes.apk
           if-no-files-found: error
           retention-days: 30
+
 

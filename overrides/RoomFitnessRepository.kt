@@ -18,6 +18,8 @@ import com.example.data.model.UserProfile
 import com.example.data.model.WaterLog
 import com.example.data.model.WeightLog
 import com.example.data.network.RemoteFoodDataSource
+import com.example.data.catalog.PreparedDishCatalog
+import kotlinx.coroutines.flow.map
 import com.example.util.BarcodeUtils
 import com.example.domain.repository.FitnessRepository
 import com.example.domain.model.BarcodeLookupException
@@ -34,14 +36,17 @@ class RoomFitnessRepository(
     private val userDao: UserDao,
     private val measurementDao: MeasurementDao,
     private val habitDao: HabitDao,
-    private val remoteFoodDataSource: RemoteFoodDataSource
+    private val remoteFoodDataSource: RemoteFoodDataSource,
+    private val builtInFoods: List<FoodItem> = emptyList()
 ) : FitnessRepository {
     private val barcodeLookupMutex = Mutex()
 
     // Food
-    override val allFoods: Flow<List<FoodItem>> = foodDao.getAllFoods()
-    override fun searchFoods(query: String): Flow<List<FoodItem>> = foodDao.searchFoods(query)
-    override fun getFoodsByCategory(category: String): Flow<List<FoodItem>> = foodDao.getFoodsByCategory(category)
+    override val allFoods: Flow<List<FoodItem>> = foodDao.getAllFoods().map { saved ->
+        (saved + builtInFoods).distinctBy { it.name.lowercase() }
+    }
+    override fun searchFoods(query: String): Flow<List<FoodItem>> = allFoods.map { foods -> foods.filter { PreparedDishCatalog.matches(it, query) } }
+    override fun getFoodsByCategory(category: String): Flow<List<FoodItem>> = allFoods.map { foods -> foods.filter { it.category == category } }
     override suspend fun findFoodByBarcode(barcode: String): FoodItem? = barcodeLookupMutex.withLock {
         val candidates = BarcodeUtils.lookupCandidates(barcode)
         if (candidates.isEmpty()) return@withLock null
@@ -118,3 +123,4 @@ class RoomFitnessRepository(
     override suspend fun saveUserProfile(profile: UserProfile) = userDao.saveUserProfile(profile)
     override suspend fun getUserProfileOnce(): UserProfile? = userDao.getUserProfileOnce()
 }
+

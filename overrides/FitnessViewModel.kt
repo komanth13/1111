@@ -276,11 +276,8 @@ class FitnessViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    val foodCatalog: StateFlow<List<FoodItem>> = _searchQuery
-        .flatMapLatest { query ->
-            if (query.isBlank()) repository.allFoods
-            else repository.searchFoods(query)
-        }
+    // Each screen owns its filters; a database search must not shrink the diary catalogue.
+    val foodCatalog: StateFlow<List<FoodItem>> = repository.allFoods
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val dailySummary: StateFlow<DailyNutritionSummary> = combine(
@@ -553,3 +550,4 @@ class FitnessViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

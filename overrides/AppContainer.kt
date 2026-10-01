@@ -2,6 +2,7 @@ package com.example.app
 
 import android.content.Context
 import com.example.data.db.AppDatabase
+import com.example.data.catalog.PreparedDishCatalog
 import com.example.data.repository.AdminConfigManager
 import com.example.data.network.OpenFoodFactsClient
 import com.example.data.repository.RoomFitnessRepository
@@ -32,7 +33,8 @@ class AppContainer(context: Context) {
             userDao = database.userDao(),
             measurementDao = database.measurementDao(),
             habitDao = database.habitDao(),
-            remoteFoodDataSource = OpenFoodFactsClient()
+            remoteFoodDataSource = OpenFoodFactsClient(),
+            builtInFoods = PreparedDishCatalog.load(appContext)
         )
     }
 

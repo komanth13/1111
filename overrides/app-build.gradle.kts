@@ -21,8 +21,8 @@ android {
         applicationId = "com.aistudio.slimtrack.vwnpzk.stable"
         minSdk = 24
         targetSdk = 36
-        versionCode = 13
-        versionName = "3.3.2"
+        versionCode = 14
+        versionName = "3.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -140,3 +140,4 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
+

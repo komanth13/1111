@@ -387,6 +387,20 @@ enum class StringKey {
 
     // Foods extra
     FOODS_TITLE,
+    CATALOG_DISHES,
+    CATALOG_PRODUCTS,
+    CATALOG_ALL_CUISINES,
+    CATALOG_EMPTY_HINT,
+    DISH_ESTIMATE_NOTE,
+    RECIPE_CALCULATED_NOTE,
+    RECIPE_MY_RECIPE,
+    RECIPE_BUILDER_HINT,
+    RECIPE_NAME,
+    RECIPE_ADD_INGREDIENT,
+    RECIPE_INGREDIENT_NOT_FOUND,
+    RECIPE_FINISHED_WEIGHT,
+    RECIPE_VALIDATION_HINT,
+    RECIPE_SAVE,
     FOODS_SUBTITLE,
     FOODS_SEARCH_HINT,
     FOODS_CAT_ALL,
@@ -618,7 +632,7 @@ object LocalizationManager {
 
             StringKey.FOOD_SEARCH_PLACEHOLDER to "Поиск продуктов по названию...",
             StringKey.FOOD_ALL_CATEGORIES to "Все категории",
-            StringKey.FOOD_CREATE_CUSTOM to "Создать продукт",
+            StringKey.FOOD_CREATE_CUSTOM to "Свой продукт",
 
             StringKey.INSIGHTS_TITLE to "Аналитика и советы",
             StringKey.INSIGHTS_STREAKS to "Трекер привычек",
@@ -837,9 +851,23 @@ object LocalizationManager {
             StringKey.ADMIN_REQUISITES_SAVE_BTN to "Сохранить реквизиты ✓",
             StringKey.ADMIN_REQUISITES_SAVED_TOAST to "Реквизиты сохранены!",
 
-            StringKey.FOODS_TITLE to "База продуктов",
+            StringKey.FOODS_TITLE to "Каталог",
+            StringKey.CATALOG_DISHES to "Блюда",
+            StringKey.CATALOG_PRODUCTS to "Продукты",
+            StringKey.CATALOG_ALL_CUISINES to "Все кухни",
+            StringKey.CATALOG_EMPTY_HINT to "Ничего не найдено. Попробуйте другое название или сбросьте фильтры. Свое блюдо можно добавить во вкладке «Мой рецепт».",
+            StringKey.DISH_ESTIMATE_NOTE to "Ориентировочные КБЖУ стандартного рецепта. Состав, масло и способ приготовления меняют результат.",
+            StringKey.RECIPE_CALCULATED_NOTE to "Расчет по вашим ингредиентам и готовому весу. Точность зависит от введенных данных.",
+            StringKey.RECIPE_MY_RECIPE to "Мой рецепт",
+            StringKey.RECIPE_BUILDER_HINT to "Добавьте ингредиенты и их вес. Выбирайте правильное состояние: сырой или приготовленный продукт. Учитывайте съеденное масло. Затем взвесьте все готовое блюдо без посуды, включая воду в супе.",
+            StringKey.RECIPE_NAME to "Название блюда",
+            StringKey.RECIPE_ADD_INGREDIENT to "Найти ингредиент",
+            StringKey.RECIPE_INGREDIENT_NOT_FOUND to "Ингредиент не найден. Его можно сначала добавить во вкладке «Свой продукт» по данным с упаковки.",
+            StringKey.RECIPE_FINISHED_WEIGHT to "Вес всего готового блюда, г",
+            StringKey.RECIPE_VALIDATION_HINT to "Укажите положительный вес каждого ингредиента и всего готового блюда. Проверьте итоговый вес.",
+            StringKey.RECIPE_SAVE to "Сохранить блюдо",
             StringKey.FOODS_SUBTITLE to "Калорийность и БЖУ на 100 г",
-            StringKey.FOODS_SEARCH_HINT to "Поиск продуктов...",
+            StringKey.FOODS_SEARCH_HINT to "Найти блюдо или продукт…",
             StringKey.FOODS_CAT_ALL to "Все",
             StringKey.FOODS_CAT_MEAT to "Мясо и птица",
             StringKey.FOODS_CAT_FISH to "Рыба",
@@ -1032,7 +1060,7 @@ object LocalizationManager {
 
             StringKey.FOOD_SEARCH_PLACEHOLDER to "Пошук продуктів за назвою...",
             StringKey.FOOD_ALL_CATEGORIES to "Всі категорії",
-            StringKey.FOOD_CREATE_CUSTOM to "Створити продукт",
+            StringKey.FOOD_CREATE_CUSTOM to "Свій продукт",
 
             StringKey.INSIGHTS_TITLE to "Аналітика та поради",
             StringKey.INSIGHTS_STREAKS to "Трекер звичок",
@@ -1251,9 +1279,23 @@ object LocalizationManager {
             StringKey.ADMIN_REQUISITES_SAVE_BTN to "Зберегти реквізити ✓",
             StringKey.ADMIN_REQUISITES_SAVED_TOAST to "Реквізити збережено!",
 
-            StringKey.FOODS_TITLE to "База продуктів",
+            StringKey.FOODS_TITLE to "Каталог",
+            StringKey.CATALOG_DISHES to "Страви",
+            StringKey.CATALOG_PRODUCTS to "Продукти",
+            StringKey.CATALOG_ALL_CUISINES to "Усі кухні",
+            StringKey.CATALOG_EMPTY_HINT to "Нічого не знайдено. Спробуйте іншу назву або скиньте фільтри. Свою страву можна додати у вкладці «Мій рецепт».",
+            StringKey.DISH_ESTIMATE_NOTE to "Орієнтовні КБЖВ стандартного рецепта. Склад, олія та спосіб приготування змінюють результат.",
+            StringKey.RECIPE_CALCULATED_NOTE to "Розрахунок за вашими інгредієнтами та готовою вагою. Точність залежить від введених даних.",
+            StringKey.RECIPE_MY_RECIPE to "Мій рецепт",
+            StringKey.RECIPE_BUILDER_HINT to "Додайте інгредієнти та їхню вагу. Обирайте правильний стан: сирий або приготовлений продукт. Враховуйте спожиту олію. Потім зважте всю готову страву без посуду, включно з водою в супі.",
+            StringKey.RECIPE_NAME to "Назва страви",
+            StringKey.RECIPE_ADD_INGREDIENT to "Знайти інгредієнт",
+            StringKey.RECIPE_INGREDIENT_NOT_FOUND to "Інгредієнт не знайдено. Його можна спочатку додати у вкладці «Свій продукт» за даними з упаковки.",
+            StringKey.RECIPE_FINISHED_WEIGHT to "Вага всієї готової страви, г",
+            StringKey.RECIPE_VALIDATION_HINT to "Вкажіть додатну вагу кожного інгредієнта й усієї готової страви. Перевірте підсумкову вагу.",
+            StringKey.RECIPE_SAVE to "Зберегти страву",
             StringKey.FOODS_SUBTITLE to "Калорійність та БЖВ на 100 г",
-            StringKey.FOODS_SEARCH_HINT to "Пошук продуктів...",
+            StringKey.FOODS_SEARCH_HINT to "Знайти страву або продукт…",
             StringKey.FOODS_CAT_ALL to "Всі",
             StringKey.FOODS_CAT_MEAT to "М'ясо та птиця",
             StringKey.FOODS_CAT_FISH to "Риба",
@@ -1446,7 +1488,7 @@ object LocalizationManager {
 
             StringKey.FOOD_SEARCH_PLACEHOLDER to "Search food items...",
             StringKey.FOOD_ALL_CATEGORIES to "All Categories",
-            StringKey.FOOD_CREATE_CUSTOM to "Create Food",
+            StringKey.FOOD_CREATE_CUSTOM to "My product",
 
             StringKey.INSIGHTS_TITLE to "Insights & Tips",
             StringKey.INSIGHTS_STREAKS to "Habit Streaks",
@@ -1665,9 +1707,23 @@ object LocalizationManager {
             StringKey.ADMIN_REQUISITES_SAVE_BTN to "Save Requisites ✓",
             StringKey.ADMIN_REQUISITES_SAVED_TOAST to "Payment details saved!",
 
-            StringKey.FOODS_TITLE to "Food Database",
+            StringKey.FOODS_TITLE to "Catalogue",
+            StringKey.CATALOG_DISHES to "Dishes",
+            StringKey.CATALOG_PRODUCTS to "Products",
+            StringKey.CATALOG_ALL_CUISINES to "All cuisines",
+            StringKey.CATALOG_EMPTY_HINT to "No matches. Try another name or clear the filters. Add your own dish in My recipe.",
+            StringKey.DISH_ESTIMATE_NOTE to "Estimated nutrition for a representative recipe. Ingredients, oil and cooking method affect the result.",
+            StringKey.RECIPE_CALCULATED_NOTE to "Calculated from your ingredients and finished weight. Accuracy depends on the entered data.",
+            StringKey.RECIPE_MY_RECIPE to "My recipe",
+            StringKey.RECIPE_BUILDER_HINT to "Add ingredients and their weights, using the correct raw or cooked state. Include oil retained in the dish. Weigh the entire finished dish without its container, including soup liquid.",
+            StringKey.RECIPE_NAME to "Dish name",
+            StringKey.RECIPE_ADD_INGREDIENT to "Find an ingredient",
+            StringKey.RECIPE_INGREDIENT_NOT_FOUND to "Ingredient not found. Add it first in My product using its label values.",
+            StringKey.RECIPE_FINISHED_WEIGHT to "Whole finished dish weight, g",
+            StringKey.RECIPE_VALIDATION_HINT to "Enter positive weights for every ingredient and the finished dish. Check the finished weight.",
+            StringKey.RECIPE_SAVE to "Save dish",
             StringKey.FOODS_SUBTITLE to "Calories & macros per 100g",
-            StringKey.FOODS_SEARCH_HINT to "Search foods...",
+            StringKey.FOODS_SEARCH_HINT to "Find a dish or product…",
             StringKey.FOODS_CAT_ALL to "All",
             StringKey.FOODS_CAT_MEAT to "Meat & Poultry",
             StringKey.FOODS_CAT_FISH to "Fish",
@@ -1888,6 +1944,7 @@ object LocalizationManager {
     )
 
     fun translateFoodName(rawName: String, lang: AppLanguage = _currentLanguage.value): String {
+        com.example.data.catalog.PreparedDishCatalog.translatedName(rawName, lang)?.let { return it }
         return when (lang) {
             AppLanguage.RU -> rawName
             AppLanguage.UK -> foodTranslationsUk[rawName] ?: rawName
@@ -1924,7 +1981,7 @@ object LocalizationManager {
             "Орехи и снеки", "Nuts & Snacks", "Горіхи та снеки" -> StringKey.FOODS_CAT_SNACKS
             else -> null
         }
-        return if (key != null) getString(key, lang) else rawCategory
+        return if (key != null) getString(key, lang) else com.example.data.catalog.PreparedDishCatalog.categoryName(rawCategory, lang)
     }
 
     fun translateFeatureTitle(feature: AppFeature, lang: AppLanguage = _currentLanguage.value): String {
@@ -2135,3 +2192,4 @@ fun localizedNote(rawNote: String): String =
 @Composable
 fun localizedCategory(rawCategory: String): String =
     LocalizationManager.translateCategory(rawCategory, LocalAppLanguage.current)
+

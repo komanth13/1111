@@ -1,6 +1,8 @@
 package com.example.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.model.FoodItem
+import com.example.data.catalog.PreparedDishCatalog
 import com.example.data.model.MealType
 import com.example.ui.theme.CarbRose
 import com.example.ui.theme.FatAmber
@@ -82,9 +85,9 @@ fun AddFoodDialog(
     val currentLang = com.example.util.appLanguage()
     var selectedTab by remember { mutableIntStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("Все") }
-
-    val categories = listOf("Все", "Мясо и птица", "Рыба", "Крупы", "Молочные продукты", "Овощи", "Фрукты", "Орехи и снеки")
+    var catalogSelection by remember(initialFood) { mutableStateOf(CatalogSelection(
+        if (initialFood != null && !PreparedDishCatalog.isDish(initialFood)) PreparedDishCatalog.Kind.PRODUCTS
+        else PreparedDishCatalog.Kind.DISHES)) }
 
     val localizedMealTitle = when (mealType) {
         MealType.BREAKFAST -> appString(StringKey.DIARY_MEAL_BREAKFAST)
@@ -93,19 +96,12 @@ fun AddFoodDialog(
         MealType.SNACK -> appString(StringKey.DIARY_MEAL_SNACKS)
     }
 
-    // Filter foods with multilingual support
-    val filteredFoods = remember(foods, searchQuery, selectedCategory, currentLang) {
-        foods.filter { item ->
-            val translatedName = LocalizationManager.translateFoodName(item.name, currentLang)
-            val matchesQuery = searchQuery.isBlank() ||
-                item.name.contains(searchQuery, ignoreCase = true) ||
-                translatedName.contains(searchQuery, ignoreCase = true)
-            val matchesCat = selectedCategory == "Все" || item.category == selectedCategory
-            matchesQuery && matchesCat
-        }
+    val filteredFoods = remember(foods, searchQuery, catalogSelection, currentLang) {
+        foods.filter { catalogSelection.accepts(it) && PreparedDishCatalog.matches(it, searchQuery) }
     }
 
     var selectedFood by remember(initialFood) { mutableStateOf(initialFood) }
+    var portionInput by remember(initialFood) { mutableStateOf((initialFood?.defaultServingGrams ?: 100f).roundToInt().toString()) }
     var portionGrams by remember(initialFood) {
         mutableFloatStateOf(initialFood?.defaultServingGrams ?: 100f)
     }
@@ -119,6 +115,7 @@ fun AddFoodDialog(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 24.dp)
         ) {
@@ -145,9 +142,9 @@ fun AddFoodDialog(
                         )
                         Text(
                             text = when (currentLang) {
-                                AppLanguage.UK -> "Оберіть продукт або вкажіть порцію"
-                                AppLanguage.EN -> "Select a product or enter portion size"
-                                else -> "Выберите продукт или укажите порцию"
+                                AppLanguage.UK -> "Оберіть страву або продукт і вкажіть порцію"
+                                AppLanguage.EN -> "Select a dish or product and enter the portion"
+                                else -> "Выберите блюдо или продукт и укажите порцию"
                             },
                             style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -185,6 +182,12 @@ fun AddFoodDialog(
                     text = { Text(appString(StringKey.FOOD_CREATE_CUSTOM), fontWeight = FontWeight.SemiBold, style = androidx.compose.material3.MaterialTheme.typography.labelMedium, maxLines = 1) },
                     modifier = Modifier.testTag("tab_custom_food")
                 )
+                Tab(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    text = { Text(appString(StringKey.RECIPE_MY_RECIPE), style = androidx.compose.material3.MaterialTheme.typography.labelMedium) },
+                    modifier = Modifier.testTag("tab_recipe_builder")
+                )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -219,34 +222,7 @@ fun AddFoodDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Categories chip row
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        items(categories) { cat ->
-                            val isSelected = selectedCategory == cat
-                            Box(
-                                modifier = Modifier
-                                    .clip(androidx.compose.material3.MaterialTheme.shapes.medium)
-                                    .background(
-                                        if (isSelected) MaterialTheme.colorScheme.primary
-                                        else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                                    )
-                                    .clickable { selectedCategory = cat }
-                                    .padding(horizontal = 10.dp, vertical = 6.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = localizedCategory(cat),
-                                    style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
-                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (isSelected) MaterialTheme.colorScheme.onPrimary
-                                    else MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
+                    CatalogFilters(foods, catalogSelection) { catalogSelection = it }
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -257,12 +233,16 @@ fun AddFoodDialog(
                             .height(280.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        items(filteredFoods) { food ->
+                        if (filteredFoods.isEmpty()) {
+                            item { Text(appString(StringKey.CATALOG_EMPTY_HINT), modifier = Modifier.padding(12.dp)) }
+                        }
+                        items(filteredFoods, key = { it.id }) { food ->
                             FoodListItemCard(
                                 food = food,
                                 onSelect = {
                                     selectedFood = food
                                     portionGrams = food.defaultServingGrams
+                                    portionInput = portionGrams.roundToInt().toString()
                                 }
                             )
                         }
@@ -311,6 +291,13 @@ fun AddFoodDialog(
 
                             Spacer(modifier = Modifier.height(10.dp))
 
+                            DishEstimateNote(food)
+                            PreparedDishCatalog.entry(food)?.let { entry ->
+                                Text(entry.components.joinToString(", ") { localizedFoodName(it.food.name) },
+                                    style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+
                             // Calories and macros badges
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -353,13 +340,25 @@ fun AddFoodDialog(
                             )
 
                             Slider(
-                                value = portionGrams,
-                                onValueChange = { portionGrams = it },
-                                valueRange = 10f..500f,
-                                steps = 48,
+                                value = portionGrams.coerceIn(10f, 1000f),
+                                onValueChange = { portionGrams = it; portionInput = it.roundToInt().toString() },
+                                valueRange = 10f..1000f,
+                                steps = 98,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .testTag("portion_slider")
+                            )
+
+                            OutlinedTextField(
+                                value = portionInput,
+                                onValueChange = { raw ->
+                                    portionInput = raw
+                                    raw.replace(',', '.').toFloatOrNull()?.takeIf { it.isFinite() && it in 1f..5000f }
+                                        ?.let { portionGrams = it }
+                                },
+                                label = { Text(appString(StringKey.DIALOG_GRAMS_LABEL)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                                singleLine = true, modifier = Modifier.fillMaxWidth().testTag("portion_grams_input")
                             )
 
                             // Quick Portion Chips
@@ -377,7 +376,7 @@ fun AddFoodDialog(
                                                     MaterialTheme.colorScheme.primary
                                                 else MaterialTheme.colorScheme.surface
                                             )
-                                            .clickable { portionGrams = g }
+                                            .clickable { portionGrams = g; portionInput = g.roundToInt().toString() }
                                             .padding(vertical = 6.dp),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -396,6 +395,7 @@ fun AddFoodDialog(
                             Spacer(modifier = Modifier.height(14.dp))
 
                             Button(
+                                enabled = portionInput.replace(',', '.').toFloatOrNull()?.let { it.isFinite() && it in 1f..5000f } == true,
                                 onClick = {
                                     onAddMeal(
                                         food.name,
@@ -425,15 +425,25 @@ fun AddFoodDialog(
                         }
                     }
                 }
-            } else {
+            } else if (selectedTab == 1) {
                 // Custom food creator form
                 CustomFoodForm(
                     onSave = { name, cat, kcal, p, f, c ->
                         onCreateCustomFood(name, cat, kcal, p, f, c)
                         selectedTab = 0
+                        catalogSelection = CatalogSelection(PreparedDishCatalog.Kind.PRODUCTS)
                         searchQuery = name
                     }
                 )
+            } else {
+                RecipeBuilderForm(foods) { food ->
+                    onCreateCustomFood(food.name, food.category, food.calories, food.protein, food.fat, food.carbs)
+                    selectedFood = food
+                    portionGrams = food.defaultServingGrams
+                    portionInput = portionGrams.roundToInt().toString()
+                    catalogSelection = CatalogSelection()
+                    selectedTab = 0
+                }
             }
         }
     }
@@ -627,3 +637,4 @@ internal fun CustomFoodForm(
         }
     }
 }
+

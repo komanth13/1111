@@ -133,4 +133,18 @@ class RoomFitnessRepositoryTest {
             // Expected.
         }
     }
+
+    @Test fun builtInDishesAreSearchableWithoutWritingOrResettingRoom() = runTest {
+        repository.insertFood(food(custom = true))
+        val dish = FoodItem(id = -1_000_000L, name = "Борщ", category = "Супы", calories = 50f,
+            protein = 3f, fat = 2f, carbs = 5f)
+        val withDishes = RoomFitnessRepository(db.foodDao(), db.mealDao(), db.weightDao(), db.waterDao(),
+            db.exerciseDao(), db.userDao(), db.measurementDao(), db.habitDao(),
+            object : RemoteFoodDataSource { override suspend fun findByBarcode(barcode: String): FoodItem? = null },
+            builtInFoods = listOf(dish))
+        assertEquals(2, withDishes.allFoods.first().size)
+        assertEquals(listOf(dish), withDishes.searchFoods("борщ").first())
+        assertEquals(listOf(dish), withDishes.getFoodsByCategory("Супы").first())
+        assertEquals(1, db.foodDao().getAllFoods().first().size)
+    }
 }
