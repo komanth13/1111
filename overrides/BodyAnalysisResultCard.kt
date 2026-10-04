@@ -324,7 +324,7 @@ fun BodyAnalysisResultCard(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = if (estimatedWeeks > 0) "~$estimatedWeeks ${appString(StringKey.WEIGHT_WEEKS_LABEL)}" else "✓",
+                            text = if (estimatedWeeks > 0) "~$estimatedWeeks ${appString(StringKey.WEIGHT_WEEKS_LABEL)}" else if (weightDiff <= 0f) "✓" else "—",
                             style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary

@@ -298,18 +298,18 @@ fun BodyAnalysisExplainerDialog(
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
                                     text = when (currentLang) {
-                                        AppLanguage.UK -> "1. М'який дефіцит без голодування: дефіцит 15-20% (300-500 ккал) забезпечує стабільне спалювання саме жиру, а не м'язів.\n" +
-                                        "2. Норма білка (1.6-1.8 г на кг): дає довге відчуття ситості без зривів та захищає м'язовий каркас.\n" +
-                                        "3. Водний режим (30 мл на кг): вимиває токсини та знімає набряки, які часто плутають із жиром.\n" +
-                                        "4. Щоденні кроки: звичайна ходьба 7000-10000 кроків спалює більше калорій, ніж рідкісні виснажливі тренування."
-                                        AppLanguage.EN -> "1. Gentle Deficit: 15-20% deficit (300-500 kcal) burns fat steadily without hunger pangs or metabolic slowdown.\n" +
-                                        "2. Adequate Protein (1.6-1.8g/kg): Keeps you full for hours and prevents muscle loss.\n" +
-                                        "3. Hydration (30ml/kg): Flushes fluid retention and prevents false hunger signals.\n" +
-                                        "4. Daily NEAT (Steps): 7,000–10,000 daily steps burns more weekly fat than sporadic high-intensity workouts."
-                                        else -> "1. Мягкий дефицит без голода: дефицит 15-20% (300-500 ккал) сжигает именно жир, а не мышцы, без срывов и слабости.\n" +
-                                        "2. Норма белка (1.6-1.8 г на кг): дает долгое насыщение и защищает мышцы от разрушения.\n" +
-                                        "3. Водный баланс (30 мл на кг): выводит отеки, которые часто маскируются под жир, и разгоняет лимфу.\n" +
-                                        "4. Шаги и движение: обычная прогулка на 7000-10000 шагов в день сжигает больше калорий, чем редкие тренировки в зале."
+                                        AppLanguage.UK -> "1. Розрахований дефіцит: ${targets.appliedDeficit} ккал/день. Норма: ${targets.calories} ккал. Це початкова оцінка, а не обіцянка темпу схуднення.\n" +
+                                        "2. Розрахунок білка: 1.6 г на кг розрахункової ваги; при надлишковій вазі враховується цільова вага. Ваша норма: ${targets.proteinGrams} г.\n" +
+                                        "3. Жири: близько 28% калорій, вуглеводи — залишок. Воду підбирають з урахуванням умов та індивідуальних потреб.\n" +
+                                        "4. Рух — це також прогулянки, прибирання та робота на ногах. Оберіть посильну активність і стежте за трендом ваги 2–3 тижні."
+                                        AppLanguage.EN -> "1. Applied deficit: ${targets.appliedDeficit} kcal/day. Daily target: ${targets.calories} kcal. This is a starting estimate, not a promised rate of loss.\n" +
+                                        "2. Protein: 1.6 g per kg of reference weight; goal weight is considered for excess weight. Your target: ${targets.proteinGrams} g.\n" +
+                                        "3. Fat: about 28% of calories; carbohydrates use the remaining calories. Fluid needs depend on conditions and individual needs.\n" +
+                                        "4. Movement includes walks, cleaning and work on your feet. Choose manageable activity and review your weight trend over 2–3 weeks."
+                                        else -> "1. Расчётный дефицит: ${targets.appliedDeficit} ккал/день. Норма: ${targets.calories} ккал. Это начальная оценка, а не обещание темпа похудения.\n" +
+                                        "2. Расчёт белка: 1.6 г на кг расчётного веса; при избыточном весе учитывается целевой вес. Ваша норма: ${targets.proteinGrams} г.\n" +
+                                        "3. Жиры: около 28% калорий, углеводы — остаток. Воду подбирают с учётом условий и индивидуальных потребностей.\n" +
+                                        "4. Движение — это также прогулки, уборка и работа на ногах. Выберите посильную активность и следите за трендом веса 2–3 недели."
                                     },
                                     style = androidx.compose.material3.MaterialTheme.typography.labelMedium,
                                     lineHeight = 17.sp,
