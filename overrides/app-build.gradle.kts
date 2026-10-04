@@ -29,8 +29,8 @@ android {
         applicationId = "com.aistudio.slimtrack.vwnpzk.stable"
         minSdk = 24
         targetSdk = 36
-        versionCode = 15
-        versionName = "3.4.1"
+        versionCode = 16
+        versionName = "3.5.0"
         buildConfigField("String", "FIREBASE_API_KEY", quoted(identityValue("api_key")))
         buildConfigField("String", "FIREBASE_APP_ID", quoted(identityValue("app_id")))
         buildConfigField("String", "FIREBASE_PROJECT_ID", quoted(identityValue("project_id")))

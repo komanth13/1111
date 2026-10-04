@@ -527,7 +527,9 @@ class FitnessViewModel(
             currentWeightKg = baseProfile.currentWeightKg,
             activityLevel = baseProfile.activityLevel,
             goalPace = baseProfile.goalPace,
-            targetWeightKg = baseProfile.targetWeightKg
+            targetWeightKg = baseProfile.targetWeightKg,
+            averageDailySteps = baseProfile.averageDailySteps,
+            householdMinutes = baseProfile.householdMinutes
         )
         val updated = baseProfile.copy(
             dailyCalorieTarget = targets.calories,

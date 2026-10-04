@@ -77,6 +77,7 @@ import com.example.ui.theme.FatAmber
 import com.example.ui.theme.ProteinBlue
 import com.example.ui.theme.WaterBlue
 import com.example.ui.viewmodel.FitnessViewModel
+import com.example.util.CalorieCalculator
 import com.example.util.AppLanguage
 import com.example.util.AppUpdaterHelper
 import com.example.util.LocalizationManager
@@ -135,6 +136,8 @@ fun ProfileScreen(
     var targetWeightStr by remember(profile) { mutableStateOf(profile.targetWeightKg.takeIf { it > 0f }?.toString().orEmpty()) }
     var gender by remember(profile) { mutableStateOf(profile.gender) }
     var activityLevel by remember(profile) { mutableStateOf(profile.activityLevel) }
+    var stepsStr by remember(profile) { mutableStateOf(profile.averageDailySteps?.toString().orEmpty()) }
+    var householdStr by remember(profile) { mutableStateOf(profile.householdMinutes?.toString().orEmpty()) }
     var goalPace by remember(profile) { mutableStateOf(profile.goalPace) }
 
     var calorieTargetStr by remember(profile) { mutableStateOf(profile.dailyCalorieTarget.takeIf { it > 0 }?.toString().orEmpty()) }
@@ -156,6 +159,8 @@ fun ProfileScreen(
         gender = gender,
         activityLevel = activityLevel,
         goalPace = goalPace,
+        averageDailySteps = if (stepsStr.isBlank()) null else ProfileValidator.parseInteger(stepsStr) ?: -1,
+        householdMinutes = if (householdStr.isBlank()) null else ProfileValidator.parseInteger(householdStr) ?: -1,
         dailyCalorieTarget = ProfileValidator.parseInteger(calorieTargetStr) ?: 0,
         proteinTargetGrams = ProfileValidator.parseInteger(proteinTargetStr) ?: 0,
         fatTargetGrams = ProfileValidator.parseInteger(fatTargetStr) ?: 0,
@@ -201,7 +206,7 @@ fun ProfileScreen(
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "v3.1.2 ✓",
+                        text = "v3.5.0 ✓",
                         style = androidx.compose.material3.MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -690,6 +695,24 @@ fun ProfileScreen(
                         shape = androidx.compose.material3.MaterialTheme.shapes.large
                     )
 
+                    Text(appString(StringKey.LIFESTYLE_HELP), style = MaterialTheme.typography.bodySmall)
+                    OutlinedTextField(
+                        value = stepsStr, onValueChange = { stepsStr = it },
+                        label = { Text(appString(StringKey.STEPS_LABEL)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = validationErrors.containsKey(ProfileField.STEPS),
+                        supportingText = errorText(ProfileField.STEPS)?.let { message -> { Text(message) } },
+                        modifier = Modifier.fillMaxWidth().testTag("average_daily_steps_input")
+                    )
+                    OutlinedTextField(
+                        value = householdStr, onValueChange = { householdStr = it },
+                        label = { Text(appString(StringKey.HOUSEHOLD_LABEL)) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        isError = validationErrors.containsKey(ProfileField.HOUSEHOLD),
+                        supportingText = errorText(ProfileField.HOUSEHOLD)?.let { message -> { Text(message) } },
+                        modifier = Modifier.fillMaxWidth().testTag("household_minutes_input")
+                    )
+                    Text(appString(StringKey.LIFESTYLE_AUTO), style = MaterialTheme.typography.labelSmall)
                     // Activity Level
                     Text(
                         text = appString(StringKey.PROFILE_ACTIVITY_LEVEL),
@@ -700,7 +723,7 @@ fun ProfileScreen(
 
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         ActivityLevel.entries.forEach { act ->
-                            val isSelected = activityLevel == act
+                            val isSelected = stepsStr.isBlank() && householdStr.isBlank() && activityLevel == act
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -709,7 +732,7 @@ fun ProfileScreen(
                                         if (isSelected) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
                                         else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
                                     )
-                                    .clickable { activityLevel = act }
+                                    .clickable { activityLevel = act; stepsStr = ""; householdStr = "" }
                                     .padding(horizontal = 12.dp, vertical = 8.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
@@ -749,6 +772,7 @@ fun ProfileScreen(
                         }
                     }
 
+                    Text(appString(StringKey.PACE_LIMIT), style = MaterialTheme.typography.labelSmall)
                     // Goal Pace
                     Text(
                         text = appString(StringKey.PROFILE_GOAL_PACE),
@@ -803,6 +827,29 @@ fun ProfileScreen(
             val analysisValidation = ProfileValidator.validateForCalculations(candidate)
 
             if (analysisValidation.isValid) {
+                val plan = CalorieCalculator.calculateRecommendedTargets(candidate.gender, candidate.age,
+                    candidate.heightCm, candidate.currentWeightKg, candidate.activityLevel,
+                    candidate.goalPace, candidate.targetWeightKg, candidate.averageDailySteps, candidate.householdMinutes)
+                Card(modifier = Modifier.fillMaxWidth().testTag("nutrition_plan_preview")) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("${appString(StringKey.PLAN_MAINTENANCE)}: ${plan.tdee} ${appString(StringKey.UNIT_KCAL)}")
+                        Text("${appString(StringKey.PLAN_DEFICIT)}: ${plan.appliedDeficit} ${appString(StringKey.UNIT_KCAL)}")
+                        Text("${appString(StringKey.PLAN_TARGET)}: ${plan.calories} ${appString(StringKey.UNIT_KCAL)}",
+                            fontWeight = FontWeight.Bold)
+                        Text("${appString(StringKey.PROFILE_PROTEIN_GOAL)}: ${plan.proteinGrams} · " +
+                            "${appString(StringKey.PROFILE_FAT_GOAL)}: ${plan.fatGrams} · " +
+                            "${appString(StringKey.PROFILE_CARBS_GOAL)}: ${plan.carbGrams}")
+                        Text(appString(StringKey.PLAN_ESTIMATE), style = MaterialTheme.typography.bodySmall)
+                        Button(onClick = {
+                            val result = viewModel.autoCalculateAndSaveTargets(candidate)
+                            validationErrors = result.errors
+                            isSavedNotification = result.isValid
+                        }, modifier = Modifier.fillMaxWidth().testTag("apply_nutrition_plan_button")) {
+                            Text(appString(StringKey.PROFILE_RECALC_BTN))
+                        }
+                    }
+                }
+                Spacer(Modifier.height(10.dp))
                 BodyAnalysisResultCard(
                     age = candidate.age,
                     heightCm = candidate.heightCm,
@@ -810,7 +857,9 @@ fun ProfileScreen(
                     targetWeightKg = candidate.targetWeightKg,
                     gender = candidate.gender,
                     activityLevel = candidate.activityLevel,
-                    goalPace = candidate.goalPace
+                    goalPace = candidate.goalPace,
+                    averageDailySteps = candidate.averageDailySteps,
+                    householdMinutes = candidate.householdMinutes
                 )
             }
         }
@@ -901,7 +950,17 @@ fun ProfileScreen(
         item {
             Button(
                 onClick = {
-                    val result = viewModel.updateUserProfile(buildCandidateProfile())
+                    val candidate = buildCandidateProfile()
+                    val inputsChanged = candidate.gender != profile.gender || candidate.age != profile.age ||
+                        candidate.heightCm != profile.heightCm || candidate.currentWeightKg != profile.currentWeightKg ||
+                        candidate.targetWeightKg != profile.targetWeightKg || candidate.activityLevel != profile.activityLevel ||
+                        candidate.goalPace != profile.goalPace || candidate.averageDailySteps != profile.averageDailySteps ||
+                        candidate.householdMinutes != profile.householdMinutes
+                    val manualTargetsChanged = candidate.dailyCalorieTarget != profile.dailyCalorieTarget ||
+                        candidate.proteinTargetGrams != profile.proteinTargetGrams ||
+                        candidate.fatTargetGrams != profile.fatTargetGrams || candidate.carbTargetGrams != profile.carbTargetGrams
+                    val result = if (inputsChanged && !manualTargetsChanged)
+                        viewModel.autoCalculateAndSaveTargets(candidate) else viewModel.updateUserProfile(candidate)
                     validationErrors = result.errors
                     isSavedNotification = result.isValid
                 },
